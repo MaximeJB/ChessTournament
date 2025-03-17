@@ -1,40 +1,42 @@
+import string
+import random
+import json
+
+
 class Joueur:
+    def __init__(self,name,firstname):
+        self.name = name
+        self.firstname = firstname
 
-    listes_joueurs = []
-    id_test = 0
-    random_elo = print(f"Sans elo")
-
-    def __init__(self, id,nom,prenom,elo):
-        if id is None: Joueur.id_test += 1 
-        else : self.id = id
+    def __str__(self):
+        return self.name + " " + self.firstname
         
-#TODO : créer dans le bon format l'identifiant national d'echec
 
-        self.id = id
-        self.nom = nom
-        self.prenom = prenom
-
-        if elo is None: Joueur.random_elo
-        else: self.elo = elo
-
-    def __str__(self, listes_joueurs):
+    """ def __str__(self, listes_joueurs):
         Joueur.listes_joueurs = listes_joueurs
-        return f"{self.nom} {self.prenom} (Elo: {self.elo})"
+        return f"{self.nom} {self.prenom} (Elo: {self.elo})" """
 
     def add_player(self, new_player):
+        pass 
 
-        if new_player not in Joueur.listes_joueurs:
-            Joueur.listes_joueurs.append(new_player)
-        else : 
-            print(f"{new_player} est déjà inscrit à la compétition")
+        """ else : 
+            print(f"{new_player} est déjà inscrit à la compétition") """
+
+    def save_to_json(self):
+        player_infos = {
+                        "name": self.name,
+                        "firstname": self.firstname,
+                        }
+    
+    
+        json_data = json.dumps(player_infos, indent=2)
+        f = open("Playersinfo.json", "a")
+        f.write(json_data)
+        f.close()
 
     def remove_player(self,joueurs):
         self.joueurs= joueurs
-        joueurs.listes_joueurs.remove(joueurs)
-
-    def format_joueurs(self,new_player):
-        super().__init__()
-        self.id, self.nom, self.prenom, self.elo = new_player.split(",")
+        Joueur.listes_joueurs.remove(joueurs)
 
 
 
@@ -68,17 +70,19 @@ class Tournois:
 class Tour():
     matches = []
     dateEnd = None
+    dateStart = None 
 
     def __init__(self, nom, dateStart):
         self.nom = nom
+        self.dateStart = dateStart
     
     def add_match(self, match):
         self.matches.append(match)
     
 
 class Match:
-    
-    # players = ([instance_players1, score], [instance_players2, score])
+   
+    # players = ([instance_players1, score], [instance_players2, score]) 
     def __init__(self, joueur1, joueur2):
         self.joueur1 = joueur1
         self.joueur2 = joueur2
@@ -87,11 +91,4 @@ class Match:
         self.players.append(joueur2)
     
     def score(self):
-
-
-def jsons():
-    open("json_file.json", "r" , mode = str,)
-#TODO : un fichier json par tournoi dans data/tournament
-
-
-
+        pass
