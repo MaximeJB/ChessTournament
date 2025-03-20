@@ -18,7 +18,7 @@ def display_menu():
  """)
     
 def get_user_choice():
-    choice = input("What's your choice ?  : ")
+    choice = input(">>>  ")
     return choice 
 
 def display_user_management_menu():
@@ -30,21 +30,36 @@ def another_player():
     print("Do you want to add another player ? \n "
     "1. Yes "
     "2. No ")
-    
+
+
 def get_user_infos():
     player_infos = {
-        "Name" : input("Quel est votre nom : "),
-        "Firstname": input("What's your first name : ")
+        "Name" : input("What's your name ?  : "),
+        "Firstname": input("What's your first name ? : "),
+        "Birthdate": input("What's your birthdate ? : ")
     }
     return player_infos 
 
+
+
+def report_menu():
+        print("""
+            Report Menu
+              
+        - 1. List of all players
+        - 2. List of all tournaments
+        - 3. Tournaments data 
+        - 4. Access list of rounds for each tournaments and matches for each rounds.
+              
+ """)
+
     ##TODO : Partie Player Management
-            ##TODO : Remplir toutes les données neccessaire pour l'ajout d'un nouveau joueur. 
-            ##TODO : envoyer les résultats sur le controller 
-            ##TODO : Demander si on veut ajouter un autre joueurs avant de sortir de l'ajout joeur
-            ##TODO : Faire un print voici les nouveaux joueurs : et exit
-            ##TODO : Faire un display pour supprimer un joueur 
-            ##TODO : envoyer vers le controller vers une fonction supprimer un joueur. (.remove)
+            
+                    ##TODO : Faire une boucle (while) sur le another player pour ajouter des joueurs
+                             #tant qu'on est dans le menu ajouter joueurs
+                                        
+            
+            
     
     ##TODO : Partie report
             ##TODO : Faire un display pour le menu de la partie report avec toutes les possibilités
