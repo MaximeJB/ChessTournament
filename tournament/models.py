@@ -1,11 +1,12 @@
 import string
 import random
 import json
+import os
 from views import get_user_infos
 
 
 def json_players_data():
-    """ Enregistre tous les joueurs présent dans le logiciel dans un json """
+    """ Charge tous les joueurs présent dans le fichier json"""
     player_json = r"C:\Users\maxym\Documents\GitHub\tournament\Playersinfo.json"
     with open(player_json, "r") as json_file:
         internal_data = json.load(json_file)
@@ -17,12 +18,25 @@ def all_player_json():
     data = json_players_data()
     print(data["name"], data["firstname"])
 
+
 def tournaments_data_json():
-    """ Print toutes la data de tous les tournois du logiciel (à verifier)"""
-    tournaments_json =  
+    """ Print toutes la data de tous les tournois du logiciel"""
+    tournaments_json =  "tournaments_data.json"
+    with open(tournaments_json, "r") as f: 
+        current_data = json.load(f)
+        return current_data
+
+def all_tournaments_data_json():
+    """Print toute la data sur les tournois"""
+    tournament_data = tournaments_data_json()
+    print(tournament_data["Name"])
+
     
 
 class Joueur:
+    """ Représente un joueur et ses données """
+
+
     def __init__(self, user_infos):
         self.name = user_infos["Name"]
         self.firstname = user_infos["Firstname"]
@@ -31,12 +45,11 @@ class Joueur:
     def __str__(self):
         return self.name + " " + self.firstname + " " + self.birthdate
         
-
     # def __str__(self, listes_joueurs):
     #     Joueur.listes_joueurs = listes_joueurs
     #     return f"{self.nom} {self.prenom} (Elo: {self.elo})"
 
-   
+
 # """ 
 #         """ else : 
 #             print(f"{new_player} est déjà inscrit à la compétition") """ """
@@ -45,19 +58,34 @@ class Joueur:
         player_infos = {
                         "name": self.name,
                         "firstname": self.firstname,
-                        "birthdate": self.birthdate}
+                        "birthdate": self.birthdate
+                        }
     
-        json_data = json.dumps(player_infos, indent=2)
-        f = open("Playersinfo.json", "a")
-        f.write(json_data)
-        f.close()
+        file_path = "Playersinfo.json"
+
+        if os.path.exists("Playersinfo.json"):
+                with open(file_path, "r") as f:
+                    try:
+                        players_data = json.load(f)
+                    except json.JSONDecodeError:
+                        players_data = []
+        else : 
+            players_data = []
+
+
+        
+        players_data.append(player_infos)
+
+        with open(file_path, "w") as f:
+            json.dump(players_data, f, indent=2)
+        
+        print("Nouveau joueur ajouté avec succès !")
+       
 
    
-
-
-
 class Tournament:
     """ Représente un tournoi, ses informations et ses impact sur les données """
+
 
     def __init__(self, name, location, dateStart, dateEnd,description, number_of_rounds=4,):
         self.name = name
@@ -74,7 +102,8 @@ class Tournament:
         pass
 
     def save_tournament_data(self):
-        tournaments_infos = { "name" : self.name,
+        tournaments_infos = {
+                              "name" : self.name,
                               "description": self.description, 
                               "location": self.location, 
                               "Beginning of the tournament" : self.dateStart,
@@ -85,12 +114,30 @@ class Tournament:
                               "List of rounds" : self.all_rounds
         }
 
-        file_path = "tournaments.data.json"
-        with open(file_path, "a") as f:
-            tournament_json_data = json.dumps(tournaments_infos, indent=2)
-            f.write(tournament_json_data)
-    ##TODO : le json est corrompu de cette manière, faire en sorte qu'il soit 
-        #    initialiser de nouveau et recréer si on le réouvre. voir deepseek.
+        file_path = "tournaments_data.json"
+        if os.path.exists("tournaments_data.json"):
+                with open(file_path, "r") as f:
+                    try:
+                        tournaments_data = json.load(f)
+                    except json.JSONDecodeError:
+                        tournaments_data = []
+        
+        else : 
+        #Méthode anti corruption de fichier, si le fichier existe, je le charge
+        #et j'écris dessus. si il n'existe pas ou est corrompu, il est 
+        #rénitialisier avec une nouvelle liste.
+            tournaments_data = [] 
+
+        tournaments_data.append(tournaments_infos)
+
+        with open(file_path, "w") as f: 
+            json.dump(tournaments_data, f, indent=4)
+            
+        print("Tournoi sauvegardé avec succès !")
+        
+
+
+
 
     def scoring():
         print("Qui a gagné ?")
@@ -99,6 +146,7 @@ class Tournament:
     def add_player(self, new_player):
         ###TODO : la l'idée serait d'aller prendre un player dans le json et de l'ajouter à une instance de tournois, et donc nouveau 
         ###       json pour les données de self.tournoi
+
         self.new_player = new_player
         
 
@@ -112,9 +160,12 @@ class Tournament:
 
         
 class Tour():
+    """ Représente un tour, ses joueurs, ses données"""
+
     matches = []
     dateEnd = None
     dateStart = None 
+
 
     def __init__(self, nom, dateStart):
         self.nom = nom
@@ -125,9 +176,11 @@ class Tour():
     
 
 class Match:
+   """ Représente l'instance d'un match, ses joueurs, son score """
    match = []
 
-    # players = ([instance_players1, score], [instance_players2, score]) 
+
+    #players = ([instance_players1, score], [instance_players2, score]) 
     def __init__(self, joueur1, joueur2):
         self.joueur1 = joueur1
         self.joueur2 = joueur2
