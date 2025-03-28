@@ -31,10 +31,14 @@ def display_user_management_menu():
 
 
 def another_player():
-    print("Do you want to add another player ? \n "
-    "1. Yes "
-    "2. No "
-    "3. Main Menu")
+    print("""
+          Do you want to add another player ? \n "
+
+        "1. Yes "
+          
+        "2. No "
+          
+        "3. Main Menu""")
 
 
 def get_user_infos():
@@ -68,13 +72,6 @@ def menu_tournament():
            
            """)
      
-def start_randomization_first_rounds():
-      print(""" Do you want to randomize the players
-            and start the first round ? 
-            
-            1. Yes
-            2. No (Main Menu)
-            """ )
       
 def get_tournament_infos():
         tournament_infos = {
@@ -86,15 +83,23 @@ def get_tournament_infos():
                     "number_of_rounds" : input("How many rounds ? (per default = 4)  ")}
         return tournament_infos
 
+def get_round_infos():
+     round_info = {
+          "name" : input("What's the name of the round ? :  "),
+          "dateStart" : input("When does it start ? :  "),
+          "dateEnd" : input("When does it end ? :  ")
+            }
+     return round_info
+
 def tournament_successfully_added():
         print(""" 
               
               The tournament was sucessfully created ! 
               
-              Do you want to create the first round ?  ? 
+              Do you want to create the first round ?   
 
-              1.Yes 
-              2.No (Main Menu)
+              1. Yes 
+              2. No (Main Menu)
               
               """)
 
@@ -119,7 +124,7 @@ def tournament_successfully_added():
 
             ##TODO : Partie creer un tournoi 
         """ ##TODO : Verifier sur la fiche technique ce a quoi correspond un tournoi """
-                ##TODO : Trier de manière random les joueurs
+        """##TODO : Trier de manière random les joueurs"""
                 ##TODO : Selon les paires les ajouter dans des matchs (match1 = Match(Joueur1, Joueur2))
                 ##TODO : Prendres les victoires (input: qui a gagné ? )
                 ##TODO : Trier les joueurs selon leur victoires (dictionnaire? qu'on peut stringformatter pour voir les victoires)

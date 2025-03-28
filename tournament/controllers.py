@@ -1,5 +1,5 @@
 import os
-from views import display_menu, get_user_choice, display_user_management_menu, get_user_infos, another_player, report_menu, menu_tournament, start_randomization_first_rounds, get_tournament_infos
+from views import display_menu, get_user_choice, display_user_management_menu, get_user_infos, another_player, report_menu, menu_tournament, get_tournament_infos
 from views import tournament_successfully_added
 from models import Joueur, all_player_json, Tournament, Tour, Match 
 import sys 
@@ -21,9 +21,15 @@ def start_player_management():
                 answers = get_user_choice()
                 if answers == "2":
                     break
+                elif answers == "3":
+                    break
+                elif answers =="1":
+                    user_infos =  get_user_infos()
+                    new_player = Joueur(**user_infos) 
+                    new_player.save_to_json()
+                    break
         elif user_choice =="2":
-            False
-            display_menu
+            break
         elif user_choice == "3":
             break
         
@@ -60,22 +66,42 @@ def display_report_controller():
 
 
 def create_tournament_controller():
-        menu_tournament()
-        user_choice = get_user_choice()
-        if user_choice == "1":
-                tournament_data = get_tournament_infos()
-                tournament = Tournament(**tournament_data)
-                tournament_successfully_added()
-                models.Tournament.take_players_from_json(tournament)
-                models.Tournament.save_tournament_data(tournament)
-                print("Liste des joueurs après chargement :", tournament.list_of_players)
+        while True:
+            menu_tournament()
+            user_choice = get_user_choice()
+            if user_choice == "1":
+                    tournament_data = get_tournament_infos()
+                    tournament = Tournament(**tournament_data)
+                    tournament_successfully_added()
+                    user_choice = get_user_choice()
+                    if user_choice =="1":
+                        models.Tournament.take_players_from_json(tournament)
+                        models.Tournament.save_tournament_data(tournament)
+                        shuffle_players = models.Tournament.shuffle_and_pairs_players(tournament)
+                        round_data = views.get_round_infos()
+                        first_round = Tour(**round_data) #la je l'init
+                        Tour.add_round(first_round) #la j'ajoute le round a la liste round
+                        Tour.__str__ #la je l'affiche
+                        models.Tour.organize_first_round(shuffle_players)
 
 
-        
+            elif user_choice == "2":
+                break
+
+#Il me faut une boucle. Pour chaque pair matches.append(match)
+#ou matches = () <--- tuple 
+#for each match in shuffle_players
+# matches += match
+#le append est surment mieux pck += va coller les données
+
+#Je me suis arreté sur la création de organize_first_round
+#dans models.py, et son imbrication pour la suite du programme
+#Je dois écrire l'initialisation des matchs a partir des données
+#que je récupère dans Tour. (une possible solution est ecrite
+#dans la boucle juste au dessus)
+
             
 
-
-               
 
 
 

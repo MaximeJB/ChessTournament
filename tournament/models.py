@@ -4,6 +4,7 @@ import json
 import os
 from views import get_user_infos
 import views 
+import controllers
 
 
 
@@ -169,40 +170,66 @@ class Tournament:
     def add_tour(self, tour):
         self.__class__.append(tour)
 
-
-        
+    def shuffle_and_pairs_players(self):
+        """ La logique devrait fonctionner
+            Pour l'instant on garde le code le plus simple
+            mais il se peut qu'on doive utiliser zip_longest from
+            itertools. pour palier à ca."""
+        random.shuffle(self.list_of_players)
+        paires = list(zip(
+        self.list_of_players[::2],
+        self.list_of_players[1::2]
+        ))
+        return paires  
+    
 class Tour():
     """ Représente un tour, ses joueurs, ses données"""
 
-    matches = []
-    dateEnd = None
-    dateStart = None 
-
-
-    def __init__(self, nom, dateStart):
-        self.nom = nom
+    def __init__(self, name, dateStart, dateEnd):
+        self.nom = name
         self.dateStart = dateStart
+        self.dateEnd = dateEnd
+        self.rounds = []
     
-    def add_match(self, match):
-        self.matches.append(match)
+    def add_round(self, round):
+        self.rounds.append(round)
+
+    def __str__(self):
+        return f"""
+        The round's name is : {self.nom}
+        The round starts : {self.dateStart}
+        The round end on : {self.dateEnd}
+        Display of all the matches : {self.matches}
+        """
     
+    def organize_first_round(self, shuffle_players):
+        for pairs in shuffle_players :
+            pairs = Match
+            Match.start_matches
 
 class Match:
    """ Représente l'instance d'un match, ses joueurs, son score """
-   match = []
-
+   
     #players = ([instance_players1, score], [instance_players2, score]) 
    def __init__(self, joueur1,scoreJ1, joueur2, scoreJ2):
         self.joueur1 = joueur1, scoreJ1
         self.joueur2 = joueur2, scoreJ2
+        self.matches = []
         
         
-        Joueur.add_player(joueur1)
-        Joueur.add_player(joueur2)
 
-        self.__class__.append(joueur1)
-        self.__class__.append(joueur2)
+
+   def start_matches(self):
+    versus = Match.matches.append(players1, players2)
+    return versus 
+
+
+
+
 
 
    def score(self):
         pass
+   
+
+   
