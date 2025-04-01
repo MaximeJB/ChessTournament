@@ -5,6 +5,8 @@ from models import Joueur, all_player_json, Tournament, Tour, Match
 import sys 
 import views
 import models
+impor
+
 
 
 
@@ -77,12 +79,17 @@ def create_tournament_controller():
                     if user_choice =="1":
                         models.Tournament.take_players_from_json(tournament)
                         models.Tournament.save_tournament_data(tournament)
+                        #prendre la liste des participants
+                        
                         shuffle_players = models.Tournament.shuffle_and_pairs_players(tournament)
                         round_data = views.get_round_infos()
                         first_round = Tour(**round_data) #la je l'init
                         Tour.add_round(first_round) #la j'ajoute le round a la liste round
                         Tour.__str__ #la je l'affiche
-                        models.Tour.organize_first_round(shuffle_players)
+                        models.Tour.generate_matches_from_pair(shuffle_players)
+                        views.enter_score()
+                        get_user_choice()
+
 
 
             elif user_choice == "2":

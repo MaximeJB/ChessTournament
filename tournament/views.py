@@ -25,9 +25,13 @@ def get_user_choice():
 
 
 def display_user_management_menu():
-    print(""" Do you want to :
+    print(""" 
+          
+          Do you want to :
+
           1. Add a player
-          2. Main Menu """)
+
+          2. Main Menu  """)
 
 
 def another_player():
@@ -100,6 +104,18 @@ def tournament_successfully_added():
 
               1. Yes 
               2. No (Main Menu)
+              
+              """)
+        
+def enter_score():
+        print("""
+              
+              Who's won the match ? 
+
+              1. Joueur1
+              2. Joueur2
+              
+              
               
               """)
 

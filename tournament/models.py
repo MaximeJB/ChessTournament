@@ -4,7 +4,7 @@ import json
 import os
 from views import get_user_infos
 import views 
-import controllers
+
 
 
 
@@ -62,7 +62,7 @@ class Joueur:
         player_infos = {
                         "name": self.name,
                         "firstname": self.firstname,
-                        "birthdate": self.birthdate
+                        "birthdate": self.birthdate,
                         } 
     
         file_path = "Playersinfo.json"
@@ -85,7 +85,20 @@ class Joueur:
             json.dump(players_data, f, indent=2)
         
         print("Nouveau joueur ajouté avec succès !")
-       
+    
+def generate_ids():
+    numbers = "1234567890"
+    random.seed(10)
+    letters = string.ascii_uppercase
+    rand_letters = random.choices(letters,k=2) # where k is the number of required rand_letters
+    first_part = "".join(rand_letters)
+    rand_numbers = random.choices(numbers, k=4)
+    second_part ="".join(rand_numbers)
+    final = first_part + second_part
+    print(final)
+    
+    #Ces identifiants sont uniques et comportent deux lettres suivies de cinq chiffres
+# (par exemple, AB12345)
 
    
 class Tournament:
@@ -127,10 +140,7 @@ class Tournament:
     
 
     
-    def start_tournament():
-        Tournament = []
-        pass 
-
+    
     def save_tournament_data(self):
         tournaments_infos = {
                               "name" : self.name,
@@ -202,34 +212,32 @@ class Tour():
         Display of all the matches : {self.matches}
         """
     
-    def organize_first_round(self, shuffle_players):
-        for pairs in shuffle_players :
-            pairs = Match
-            Match.start_matches
+    def generate_matches_from_pair(self, shuffled_pairs):
+        match_list = []
+        for pair in shuffled_pairs :
+            match = Match(pair)
+            match_list.append(match)
+        return match_list
+        
+
 
 class Match:
    """ Représente l'instance d'un match, ses joueurs, son score """
    
-    #players = ([instance_players1, score], [instance_players2, score]) 
-   def __init__(self, joueur1,scoreJ1, joueur2, scoreJ2):
-        self.joueur1 = joueur1, scoreJ1
-        self.joueur2 = joueur2, scoreJ2
+
+   def __init__(self, joueur1,joueur2):
+         #players = ([instance_players1, score], [instance_players2, score]) 
+        self.joueur1 = joueur1, 
+        self.joueur2 = joueur2, 
         self.matches = []
+        #TODO : Initialiser que lors de la première init un score est toujours 0
+        #TODO : Initialiser avec une méthode que si un joueur a gagné un match, il prend +1 sur son score (et le garde)
+
+   def set_final_score(self, score1,score2):
+        self.players = ([self.joueur1, score1], [self.joueur2, score2]) 
         
-        
 
-
-   def start_matches(self):
-    versus = Match.matches.append(players1, players2)
-    return versus 
-
-
-
-
-
-
-   def score(self):
-        pass
    
+
 
    
