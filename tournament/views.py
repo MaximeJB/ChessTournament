@@ -36,13 +36,11 @@ def display_user_management_menu():
 
 def another_player():
     print("""
-          Do you want to add another player ? \n "
+    Do you want to add another player ? 
 
-        "1. Yes "
-          
-        "2. No "
-          
-        "3. Main Menu""")
+                1. Yes 
+                2. No 
+                3. Main Menu""")
 
 
 def get_user_infos():
@@ -84,7 +82,7 @@ def get_tournament_infos():
                     "location" : input("What's the tournament location ?  "),
                     "dateStart" : input("When does the tournament start ?  "),
                     "dateEnd" : input("When does the tournament end ? "),
-                    "number_of_rounds" : input("How many rounds ? (per default = 4)  ")}
+                    "number_of_rounds" : int(input("How many rounds ? (per default = 4)  "))}
         return tournament_infos
 
 def get_round_infos():
@@ -119,9 +117,19 @@ def enter_score():
               
               """)
 
+def choose_players():
+        player = input(""" 
+                       
+                       Enter the IDs of players who will play in this tournament, split the players by a comma : 
+                       
+                       """)
+        return player
 
-
-    ##TODO : Partie Player Management
+def display_match(match_number, total_matches, player1, player2):
+    print(f"\n[MATCH {match_number}/{total_matches}]")
+    print(f"1. {player1} gagne")
+    print(f"2. {player2} gagne")
+    print(f"3. Match nul")
             
                     
                                         
@@ -129,9 +137,7 @@ def enter_score():
             
     
     ##TODO : Partie report
-        """  ##TODO : Faire un display pour le menu de la partie report avec toutes les possibilités """
-        """ ##TODO : Récuperer l'input, l'envoyer vers le controller """
-        """   ##TODO : faire des fonctions pour chaque sous parties """
+
         ##TODO : Fonctions listes de joueurs par ordre alphabétique
                     ##TODO : print d'une liste avec un formattage alphabétique
                 ##TODO : Listes des tournois
@@ -139,8 +145,7 @@ def enter_score():
                          #si j'affiche un user choice pour voir les paramètres 
 
             ##TODO : Partie creer un tournoi 
-        """ ##TODO : Verifier sur la fiche technique ce a quoi correspond un tournoi """
-        """##TODO : Trier de manière random les joueurs"""
+
                 ##TODO : Selon les paires les ajouter dans des matchs (match1 = Match(Joueur1, Joueur2))
                 ##TODO : Prendres les victoires (input: qui a gagné ? )
                 ##TODO : Trier les joueurs selon leur victoires (dictionnaire? qu'on peut stringformatter pour voir les victoires)

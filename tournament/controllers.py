@@ -1,11 +1,10 @@
 import os
 from views import display_menu, get_user_choice, display_user_management_menu, get_user_infos, another_player, report_menu, menu_tournament, get_tournament_infos
 from views import tournament_successfully_added
-from models import Joueur, all_player_json, Tournament, Tour, Match 
-import sys 
-import views
+from models import Joueur, all_player_json, Tournament, Tour, generate_ids
 import models
-impor
+import views
+
 
 
 
@@ -17,7 +16,8 @@ def start_player_management():
         if user_choice == "1":
             while True :
                 user_infos =  get_user_infos()
-                new_player = Joueur(**user_infos) 
+                player_id = generate_ids()
+                new_player = Joueur(player_id = player_id, **user_infos) 
                 new_player.save_to_json()
                 another_player()
                 answers = get_user_choice()
@@ -27,7 +27,8 @@ def start_player_management():
                     break
                 elif answers =="1":
                     user_infos =  get_user_infos()
-                    new_player = Joueur(**user_infos) 
+                    player_id = generate_ids()
+                    new_player = Joueur(player_id = player_id, **user_infos) 
                     new_player.save_to_json()
                     break
         elif user_choice =="2":
@@ -64,6 +65,38 @@ def display_report_controller():
             break
 
 
+def set_scores(match):
+    """Gère la saisie des scores et met à jour l'historique des adversaires"""
+    
+    print(f"\n--- Match : {match.joueur1} vs {match.joueur2} ---")
+    
+    # Validation des scores avec boucle de contrôle
+    ##TODO : Spliter pour mettre l'input en vue
+    while True:
+        try:
+            score1 = float(input(f"Score pour {match.joueur1} (0, 0.5, 1) : "))
+            if score1 not in {0, 0.5, 1}:
+                raise ValueError
+            break
+        except ValueError:
+            print("Erreur : Entrez uniquement 0, 0.5 ou 1")
+
+    match.score1 = score1
+    match.score2 = 1 - score1  # Garantit que la somme vaut toujours 1
+                                #Si score = 1, score2 = 0
+                                #sI Score1 = 0.5, 1-0.5 = 0.5
+                                #si score1 = 0. 1-0 = 1
+    
+    # Mise à jour des scores
+    match.joueur1.score += match.score1
+    match.joueur2.score += match.score2
+    
+    # Ajout des adversaires (avec vérification de doublon)
+    if match.joueur2.id not in match.joueur1.opponents:
+        match.joueur1.opponents.append(match.joueur2.id)
+    
+    if match.joueur1.id not in match.joueur2.opponents:
+        match.joueur2.opponents.append(match.joueur1.id)
         
 
 
@@ -77,36 +110,35 @@ def create_tournament_controller():
                     tournament_successfully_added()
                     user_choice = get_user_choice()
                     if user_choice =="1":
-                        models.Tournament.take_players_from_json(tournament)
-                        models.Tournament.save_tournament_data(tournament)
-                        #prendre la liste des participants
-                        
-                        shuffle_players = models.Tournament.shuffle_and_pairs_players(tournament)
-                        round_data = views.get_round_infos()
-                        first_round = Tour(**round_data) #la je l'init
-                        Tour.add_round(first_round) #la j'ajoute le round a la liste round
-                        Tour.__str__ #la je l'affiche
-                        models.Tour.generate_matches_from_pair(shuffle_players)
-                        views.enter_score()
-                        get_user_choice()
+                        tournament.select_players_for_tournament()
+                        tournament.save_tournament_data()
+                        for i in range(tournament.number_of_rounds):
+                            shuffle_players = tournament.shuffle_and_pairs_players()
+                            round_data = views.get_round_infos()
+                            round = Tour(**round_data) #la je l'init
+                            versus = round.generate_matches_from_pair(shuffle_players)
+                            for match in versus :
+                                print(match)   
+                            print("Enters the results : ")
+                            for match in versus : 
+                                set_scores(match)
+                               # round.add_match(match) # l'instance round ajoute les match dans une liste de match
+                            tournament.add_tour(round) #la j'ajoute le round a la liste round
+                        for i in range (tournament.number_of_rounds):
+                            for tour in tournament.all_rounds:
+                                print(tour)
+                                for match in tour.match_list:
+                                    print(match)
 
 
 
-            elif user_choice == "2":
-                break
 
-#Il me faut une boucle. Pour chaque pair matches.append(match)
-#ou matches = () <--- tuple 
-#for each match in shuffle_players
-# matches += match
-#le append est surment mieux pck += va coller les données
-
-#Je me suis arreté sur la création de organize_first_round
-#dans models.py, et son imbrication pour la suite du programme
-#Je dois écrire l'initialisation des matchs a partir des données
-#que je récupère dans Tour. (une possible solution est ecrite
-#dans la boucle juste au dessus)
-
+##TODO : sauvegarder les tounrois en entier dans un json. sauvegarder tournoi a la fin du tournoi
+##TODO : sauvegarder le tournoi a chaque fois qu'on crée un round, 
+##TODO : formatter le debrief pour montrer les vainqueurs, montrer les matchs pour chaque tour, qui a gagné qui a perdu
+##TODO : finir la partie report 
+##TODO : faire le readme du projet, expliquer le projet, comment créer un environnement virtuel, comment installer les dépendances du projet
+##TODO : faire des classes pour contenir toutes les fonctions de controllers, classe pour contenir tout les views
             
 
 
@@ -135,8 +167,8 @@ def run():
         
 
 
-        # 1 - Add player to the tournament
-        # 2 - Sort players random2ly if the first round 
+    """  # 1 - Add player to the tournament """
+    """    # 2 - Sort players random2ly if the first round """
         # 3 - Sort players by their scoring after their firsts matches
         # 4 - Create matches for the round (If two players have the same score then we can put then together,)
 
@@ -144,8 +176,8 @@ def run():
 
         # 4 - For each round, enter the scores of the matches
 
-    # 2 - Player Management
-        # 1 - Add Player in the database
+    """ # 2 - Player Management
+        # 1 - Add Player in the database """
         
 
     # 3 - Reports
@@ -154,13 +186,7 @@ def run():
         # Names and dates of each tournaments
         # List of the tours by tournaments and the matches by tours
             
-#           VENDREDI : 
-##TODO : Créer une fonction pour prendre les joueurs dans le json Joueur et 
-#         les ajouter au tournoi.
-##TODO : Creer le premier tour. c'est a dire imbriquer joueur, tournois, et tour. 
-#        surement via des instances Tour.start_first_round()
-#TODO : Randomiser les joueurs, créer le tuple. avoir un print du round et de ses infos
-#TODO : créer second round, input du vainqueur, affichage des scores 
+
 
 if __name__ == "__main__":
     run()
