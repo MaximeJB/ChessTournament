@@ -1,10 +1,4 @@
-#TODO : verifier le format de L'ID
-#TODO : Ajouter un joueur, avec id, nom, prenom, date de naissance
-#et les passer a add player
 
-#TODO : demander user les scores. gagnant 1 pts, perdant 0.
-#match nul = 0.5
-#pour un match specifique
 """ Module views avec tous les prints de l'application """
 
 def display_menu():
@@ -73,11 +67,35 @@ def menu_tournament():
            2. Retour au menu principal
            
            """)
+
+
+def validate_data(data,datatype):
+
+    if datatype == str:
+        return data.isdigit() is False
+    elif datatype == int:
+        return data.isdigit() is True
+    elif datatype == date:
+        pass
+
+    raise Exception("Data type not handled yet!")
+
+def input_with_validator(prompt, data_type):
+    # prompt = "What's the name of the tournament ?
+    # 
+
+    data_is_valid = False
+
+    while data_is_valid == False:
+        text = input(prompt)
+        data_is_valid = validate_data(text, data_type)
+    
+    return text
+
      
-      
 def get_tournament_infos():
         tournament_infos = {
-                    "name" : input("What's the name of the tournament ?  "),
+                    "name" : input_with_validator("What's the name of the tournament ?  ", str),
                     "description" : input("What's the tournament description ?  "),
                     "location" : input("What's the tournament location ?  "),
                     "dateStart" : input("When does the tournament start ?  "),
@@ -130,30 +148,55 @@ def display_match(match_number, total_matches, player1, player2):
     print(f"1. {player1} gagne")
     print(f"2. {player2} gagne")
     print(f"3. Match nul")
-            
-                    
-                                        
-            
-            
+
+# Nouvelle fonction pour afficher les joueurs et récupérer les choix
+def select_players_for_tournament_view(players):
+    print("\n--- Sélection des joueurs ---")
+    for idx, player in enumerate(players, 1):
+        print(f"{idx} - {player['name']} {player['firstname']} -- ID: {player['id']}.")
     
-    ##TODO : Partie report
+    choix = input("Entrez les numéros des joueurs (ex: 1,3,5) : ")
+    return [int(num.strip()) for num in choix.split(',')]
+            
+def set_scores_views(match):
+      while True:
+        try:
+            score1 = float(input(f"Score pour {match.joueur1} (0, 0.5, 1) : "))
+            if score1 not in {0, 0.5, 1}:
+                raise ValueError
+            return score1
+        except ValueError:
+            print("Erreur : Entrez uniquement 0, 0.5 ou 1")
 
-        ##TODO : Fonctions listes de joueurs par ordre alphabétique
-                    ##TODO : print d'une liste avec un formattage alphabétique
-                ##TODO : Listes des tournois
-                ##TODO : print d'une liste avec tous les tournois, a voir si j'affiche les paramètres, 
-                         #si j'affiche un user choice pour voir les paramètres 
+def display_debrief(debrief_data):
+    """Affiche le debrief à partir des données brutes."""
+    print("\n=== DEBRIEF FINAL ===")
+    
+    # Classement
+    print("\nClassement Final :")
+    for idx, player in enumerate(debrief_data["ranking"], 1):
+        print(f"{idx}. {player.name} {player.firstname} - {player.score} pts")
+    
+    # Détails des rounds
+    print("\nDétails par Round :")
+    for round in debrief_data["rounds"]:
+        print(f"\n  Round {round.nom} :")
+        for match in round.match_list:
+            result = "Égalité" if match.score1 == 0.5 else \
+                    f"Gagnant: {match.joueur1}" if match.score1 == 1 else \
+                    f"Gagnant: {match.joueur2}"
+            print(f"    {match.joueur1} vs {match.joueur2} → {result}")
+        
+def display_match(match_data): #Partie report, pour avoir les informations d'un tournoi et des rounds
+    print(f"{match_data['joueur1']['name']} {match_data['joueur1']['firstname']} vs {match_data['joueur2']['name']} {match_data['joueur2']['firstname']}")
 
-            ##TODO : Partie creer un tournoi 
 
-                ##TODO : Selon les paires les ajouter dans des matchs (match1 = Match(Joueur1, Joueur2))
-                ##TODO : Prendres les victoires (input: qui a gagné ? )
-                ##TODO : Trier les joueurs selon leur victoires (dictionnaire? qu'on peut stringformatter pour voir les victoires)
-                         #Ou directement dans l'init du joueurs PENDANT un tournoi ? paramètre
-                         #Comme ca on pourrait faire un print(Joueur1) ou un __str__ et voir son nombre de victoire
-                ##TODO : Créer des matchs selon les scorings (Formattage liste -> listes vainqueurs -> classe Match sur eux)
-                
-                
+def display_round(round_data): #Partie report toujours.
+    print(f"\n--- Round {round_data['nom']} ({round_data['dateStart']} à {round_data['dateEnd']}) ---")
+
+
+def get_tournament_name(): #Utile pour la partie report
+    return input("Nom du tournoi à afficher : ")
 
 #Partie report 
 

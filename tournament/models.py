@@ -2,10 +2,9 @@ import string
 import random
 import json
 import os
-from views import get_user_infos
 import views 
-
-
+import datetime
+import pdb 
 
 
 def json_players_data():
@@ -24,46 +23,46 @@ def all_player_json():
 
 
 def tournaments_data_json():
-    """ Print toutes la data de tous les tournois du logiciel """
-    tournaments_json =  "tournaments_data.json"
-    with open(tournaments_json, "r") as f: 
-        current_data = json.load(f)
-        return current_data
+    all_tournaments = []
+    
+    # Vérifie si le dossier existe
+    if not os.path.exists("tournaments"):
+        return all_tournaments  # Retourne liste vide si dossier inexistant
+    
+    # Parcourt tous les fichiers .json du dossier
+    for filename in os.listdir("tournaments"):
+        if filename.endswith(".json"):
+            file_path = os.path.join("tournaments", filename)
+            try:
+                with open(file_path, "r") as f:
+                    tournament_data = json.load(f)
+                   
 
-def all_tournaments_data_json():
-    """Print toute la data sur les tournois """
+                    all_tournaments.append(tournament_data)
+
+            except (json.JSONDecodeError, PermissionError) as e:
+                print(f"Erreur avec {filename} : {str(e)}")
+    
+    return all_tournaments
+
+
+def all_tournaments_data_json(): 
+    """ Print les noms de tous les tournois """
     tournament_data = tournaments_data_json()
-    print(tournament_data["Name"])
+    print(tournament_data["name"])
 
-def process_matches(versus):
-    for i, match in enumerate(versus, 1):
-        # Affichage du match
-        views.display_match(
-            match_number=i,
-            total_matches=len(versus),
-            player1=match.joueur1,
-            player2=match.joueur2
-        )
-        
-        # Récupération du choix utilisateur
-        while True:
-            choice = views.get_user_choice()
-            if choice in {"1", "2", "3"}:
-                break
-            print("Choix invalide. Réessayez.")
-        
-        # Mise à jour des scores
-        if choice == "1":
-            match.joueur1.score += 1
-        elif choice == "2":
-            match.joueur2.score += 1
-        else:  # Match nul
-            match.joueur1.score += 0.5
-            match.joueur2.score += 0.5
-        
-        # Mise à jour des adversaires rencontrés
-        match.joueur1.opponents.append(match.joueur2.id)
-        match.joueur2.opponents.append(match.joueur1.id)
+def all_player_json():
+    data = json_players_data()
+    for player in sorted(data, key=lambda x: (x["name"], x["firstname"])):  # Tri ajouté
+        print(player["name"], player["firstname"])
+
+
+def all_tournaments_json():
+    for idx, filename in enumerate(os.listdir("tournaments"), 1):
+            if filename.endswith(".json"):
+                # Extraction du nom avant le ' - ' pour l'affichage
+                tournament_name = filename.split(" - ")[0]
+                print(f"{idx}. {tournament_name}")
 
 class Joueur:
     """ Représente un joueur et ses données """
@@ -90,7 +89,13 @@ class Joueur:
             "score" : self.score,
             "opponents" : self.opponents
         }
-
+    
+    @classmethod
+    def from_dict(cls, data):
+        player = cls(data["name"])  # 1. Crée une instance de Player avec le nom du JSON
+        player.score = data["score"]  # 2. Attribue le score sauvegardé
+        return player  # 3. Renvoie le joueur reconstruit
+    
     def save_to_json(self):
         player_infos = {
                         "id": self.id,
@@ -122,6 +127,8 @@ class Joueur:
         
         print("Nouveau joueur ajouté avec succès !")
     
+
+
 def generate_ids():
 
     # Générer un ID unique
@@ -134,7 +141,6 @@ def generate_ids():
         return new_id
     
     
-
    
 class Tournament:
     """ Représente un tournoi, ses informations et ses impact sur les données """
@@ -177,18 +183,7 @@ class Tournament:
             ]
         return self.list_of_players
     
-    def select_players_for_tournament(self):
-        all_players = json_players_data()
-        print("Players in the database : ")
-        for player in all_players:
-            print(f"ID: {player["id"]} - {player["name"]} {player["firstname"]}")
-
-        selected_ids = views.choose_players().split(',')
-        self.list_of_players = [
-            Joueur(player["id"], player["name"], player["firstname"], player["birthdate"])
-            for player in all_players if player["id"] in selected_ids
-        ]
-
+    
     
     
     def save_tournament_data(self):
@@ -196,45 +191,32 @@ class Tournament:
                               "name" : self.name,
                               "description": self.description, 
                               "location": self.location, 
-                              "Beginning of the tournament" : self.dateStart,
-                              "End of tournament" : self.dateEnd,
+                              "dateStart" : self.dateStart,
+                              "dateEnd" : self.dateEnd,
                               "Numbers of rounds" : self.number_of_rounds,
                               "List of players" : [j.to_dict() for j in self.list_of_players],
-                              "Current round" : self.current_round,
-                              "List of rounds" : self.all_rounds
+                              "current_round": self.current_round.to_dict() if self.current_round else None,
+                              "all_rounds": [round.to_dict() for round in self.all_rounds]
         }
 
-        file_path = "tournaments_data.json"
-        if os.path.exists("tournaments_data.json"):
-                with open(file_path, "r") as f:
-                    try:
-                        tournaments_data = json.load(f)
-                    except json.JSONDecodeError:
-                        """ Méthode anti corruption de fichier, les données 
-                        sont chargé avant de réecrire sur le json. """
-                        tournaments_data = []
+        os.makedirs("tournaments", exist_ok=True)
+
+        filename = f"{self.name} - {self.dateStart}.json".replace(":", "-").replace(" ", "_")
+        file_path = os.path.join("tournaments", filename)  # <-- Correction clé ici
         
-        else : 
-            tournaments_data = [] 
-        tournaments_data.append(tournaments_infos)
 
         with open(file_path, "w") as f: 
-            json.dump(tournaments_data, f, indent=4)
+            json.dump(tournaments_infos, f, indent=4)
             
         
-    def scoring(self):
-        print("Qui a gagné ?")
-        dashboard = input()
-    
 
     def add_tour(self, tour):
+        """ Ajoute le tour a la liste de tous les rounds """
         self.all_rounds.append(tour)
 
     def shuffle_and_pairs_players(self):
-        """ La logique devrait fonctionner
-            Pour l'instant on garde le code le plus simple
-            mais il se peut qu'on doive utiliser zip_longest from
-            itertools. pour palier à ca."""
+        """Si c'est un premier round, shuffle l'input et crée des duos. Si c'est pas le premier round
+            """
         
         # Premier round : mélange aléatoire
         if len(self.all_rounds) == 0:  
@@ -273,7 +255,78 @@ class Tournament:
                         used.update({player1, player2})
             
             return pairs
+        
+    def save_current_data_to_json(self):
+        x = datetime.datetime.now()
+        sorted_players = sorted(self.list_of_players, key=lambda p: -p.score)
+        current_tournament_infos = {
+            "tournament_name" : self.name,
+            "date" : f" Tournament started at : {x.strftime("%c")}",
+            "rounds" : [round.to_dict() for round in self.all_rounds],
+            "current ranking" : [player.to_dict() for player in sorted_players]
+        }
+       
     
+        file_path = f"{self.name} - {x.strftime("%c")} - Current Data .json"
+
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
+        if os.path.exists("Tournament_Data_In_real_time.json"):
+            with open(file_path, "r") as f:
+                try : 
+                    tournament_data_in_real_time = json.load(f)
+                    print(tournament_data_in_real_time)
+                except json.JSONDecodeError:
+                    tournament_data_in_real_time = []
+        else : 
+            tournament_data_in_real_time = []
+
+        tournament_data_in_real_time = current_tournament_infos
+        with open(file_path,"w") as f:
+            json.dump(tournament_data_in_real_time,f,indent=2)
+            print("Tournoi sauvegardé")
+
+    @classmethod
+    def load_from_json(cls, filename):
+            with open(filename, "r") as f:  # 1. Ouvre le fichier en lecture
+                data = json.load(f)  # 2. Charge le JSON en dictionnaire `data`
+            
+            # 3. Crée une instance de Tournament avec le nom du JSON
+            tournament = cls(data["tournament_name"])
+            
+            # 4. Recrée la liste des joueurs avec leurs scores
+            tournament.list_of_players = [Joueur.from_dict(p) for p in data["current_ranking"]]
+            
+            # 5. Recrée chaque round en passant la liste des joueurs existants
+            tournament.all_rounds = [
+                Tour.from_dict(r, tournament.list_of_players)  # 6. Utilise les joueurs du tournoi
+                for r in data["rounds"]
+            ]
+            
+            return tournament  # 7. Renvoie le tournoi entièrement reconstruit
+    
+    def select_players_for_tournament(self):
+        all_players = json_players_data()
+        selected_indices = views.select_players_for_tournament_view(all_players)  
+        
+        self.list_of_players = [
+            Joueur(player["id"], player["name"], player["firstname"], player["birthdate"])
+            for idx, player in enumerate(all_players, 1) if idx in selected_indices  # idx commence à 1
+        ]
+
+    def generate_debrief_data(self):
+        """Génère les données du debrief (sans formattage)."""
+        debrief_data = {
+            "ranking": sorted(self.list_of_players, key=lambda p: (-p.score, p.id)),
+            "rounds": self.all_rounds
+        }
+        return debrief_data
+    
+    def print_players_sorted(self):
+        sorted_players = sorted(self.list_of_players, key=lambda p: (p.name, p.firstname))
+        for p in sorted_players:
+                print(p.name, p.firstname)
+
 class Tour():
     """ Représente un tour, ses joueurs, ses données"""
 
@@ -292,6 +345,14 @@ class Tour():
         Display of all the matches : {self.match_list}
         """
     
+    def to_dict(self):
+        return {
+            "nom": self.nom,
+            "dateStart": self.dateStart,
+            "dateEnd": self.dateEnd,
+            "match_list": [match.to_dict() for match in self.match_list]
+        }
+
     def generate_matches_from_pair(self, shuffled_pairs):
         """Initialise les matchs à partir des pairs récupérer dans "shuffle and pairs"
         important : un init de Match passe sur les pairs, les pairs sont rangé dans une liste 
@@ -301,10 +362,19 @@ class Tour():
             self.match_list.append(match)
         return self.match_list
     
+    @classmethod
+    def from_dict(cls, data, players):  # 1. Prend les données du round + la liste des joueurs
+        round = cls(data["round_name"])  # 2. Crée un Round avec son nom
+        for match_data in data["matches"]:  # 3. Pour chaque match dans les données
+            # 4. Trouve le joueur 1 dans la liste `players` par son nom
+            player1 = next(p for p in players if p.name == match_data["player1"])
+            # 5. Trouve le joueur 2 de la même manière
+            player2 = next(p for p in players if p.name == match_data["player2"])
+            # 6. Crée un Match avec les joueurs et le score
+            match = Match(player1, player2, tuple(match_data["score"]))
+            round.match_list.append(match)  # 7. Ajoute le match au round
+        return round  # 8. Renvoie le round reconstruit
     
-   
-  
-
 class Match:
     """ Représente l'instance d'un match, ses joueurs, son score """
    
@@ -315,14 +385,43 @@ class Match:
         self.score1 = 0
         self.score2 = 0
         
-
+    def to_dict(self):
+        return {
+            "joueur1": self.joueur1.to_dict(),
+            "joueur2": self.joueur2.to_dict(),
+            "score1": self.score1,
+            "score2": self.score2
+        }
 
     def __str__(self):
         return f"""
         
-        Le match est entre {self.joueur1} et {self.joueur2} 
+        Le match est entre {self.joueur1} et {self.joueur2}  """
 
-"""
+    def set_scores(self):
+        """Gère la saisie des scores et met à jour l'historique des adversaires"""
+        
+        print(f"\n--- Match : {self.joueur1} vs {self.joueur2} ---")
+        
+    
+        score1 = views.set_scores_views(self)
+        
 
+        self.score1 = score1
+        self.score2 = 1 - score1  
+                                
+        
+        # Mise à jour des scores
+        self.joueur1.score += self.score1
+        self.joueur2.score += self.score2
+        
+    
+        if self.joueur2.id not in self.joueur1.opponents:
+            self.joueur1.opponents.append(self.joueur2.id)
+        
+        if self.joueur1.id not in self.joueur2.opponents:
+            self.joueur2.opponents.append(self.joueur1.id)
 
-   
+    ##TODO : finir la gestion des bonnes données (verifications des données, validation)
+    ##TODO : formattage du report des tournois (option 3 et 4 sur le report)
+    ##TODO : mettre en place le controller et le views dans des classes (staticmethod)
