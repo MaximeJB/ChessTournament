@@ -1,7 +1,4 @@
-# ChessTournament
-repository pour mon avancement sur le projet numéro 4 de OC. le tournois d'echec avec de la programation POO
-
-Chess Tournament Manager
+# ChessTournamentManager
 
 Un programme Python permettant de gérer des tournois d'échecs, des joueurs et leurs résultats.
 
