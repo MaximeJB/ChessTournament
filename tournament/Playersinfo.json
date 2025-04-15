@@ -238,5 +238,29 @@
     "birthdate": "010101",
     "score": 0,
     "opponents": []
+  },
+  {
+    "id": "MG02441",
+    "name": "Elliot",
+    "firstname": "Anderson",
+    "birthdate": "11.06.1996",
+    "score": 0,
+    "opponents": []
+  },
+  {
+    "id": "ZR14155",
+    "name": "Martha",
+    "firstname": "Anderson",
+    "birthdate": "11.02.1594",
+    "score": 0,
+    "opponents": []
+  },
+  {
+    "id": "RP28069",
+    "name": "Mr Robot",
+    "firstname": "Anderson",
+    "birthdate": "01.14.1547",
+    "score": 0,
+    "opponents": []
   }
 ]

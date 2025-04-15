@@ -1,207 +1,242 @@
 
 """ Module views avec tous les prints de l'application """
+from typing import Any, Dict
+from datetime import date
 
-def display_menu():
-    print("""
-            Main Menu 
-          
-    - 1.Create a Tournement
-    - 2.Player Management
-    - 3.Reports
-    - 4.Quit
-          
- """)
+class Views :
+    """ Classe statique regroupant toutes les méthodes de vues de l'application"""
     
+     
+    @staticmethod
+    def display_menu() -> None:
+        """ Affiche le menu principal"""
 
-def get_user_choice():
-    choice = input(">>>  ")
-    return choice 
+        print("""
+                Main Menu 
+            
+        - 1.Create a Tournement
+        - 2.Player Management
+        - 3.Reports
+        - 4.Quit
+            
+    """)
+        
+    @staticmethod
+    def get_user_choice() -> str:
+        """ Demande le choix de l'utilisateur et le retourne en str"""
+
+        choice = input(">>>  ")
+        return choice 
+
+    @staticmethod
+    def display_user_management_menu() -> None:
+        """ Affiche le menu de gestion des joueurs."""
+
+        print(""" 
+            
+            Do you want to :
+
+            1. Add a player
+
+            2. Main Menu  """)
+
+    @staticmethod
+    def another_player() -> None:
+        """ Demande à l'utilisateur si il veut ajouter un autre joueur"""
+
+        print("""
+        Do you want to add another player ? 
+
+                    1. Yes 
+                    2. No 
+                    3. Main Menu""")
+
+    @staticmethod
+    def get_user_infos() -> Dict[str,str]:
+        """ Récupère un dictionnaire selon des clés Name, Firstname, et Birthdate
+            pour init un joueur. 
+        """
+
+        player_infos = {
+            "name" : Views.input_with_validator("What's your name ? ", str),
+            "firstname": Views.input_with_validator("What's your first name ?  ", str),
+            "birthdate": Views.input_with_validator("What's your birthdate ?  ", str)
+        }
+        return player_infos 
+
+    @staticmethod
+    def report_menu() -> None:
+            """ Affiche le menu des reports """
+
+            print("""
+                Report Menu
+                
+            - 1. List of all players
+            - 2. List of all tournaments
+            - 3. Tournaments data 
+            - 4. Access list of rounds for each tournaments and matches for each rounds.
+            - 5. Main Menu
+                
+    """)
+
+    @staticmethod
+    def menu_tournament() -> None:
+        """ Affiche le menu du tournoi"""
+
+        print(""" 
+            Tournament dashboard 
+            
+            1. Create a new tournament
+            2. Back to Main Menu
+            
+            """)
 
 
-def display_user_management_menu():
-    print(""" 
-          
-          Do you want to :
+    @staticmethod
+    def input_with_validator(prompt: str, data_type: type) -> Any:
+        """
+        Demande une saisie à l'utilisateur en validant son type.
 
-          1. Add a player
+        """ 
+        
+        data_is_valid = False
+        value: Any = None
 
-          2. Main Menu  """)
+        while not data_is_valid:
+            text = input(prompt)
+            if data_type == str:
+                # On considère valide toute saisie non numérique
+                data_is_valid = not text.isdigit()
+                value = text
+            elif data_type == int:
+                try:
+                    value = int(text)
+                    data_is_valid = True
+                except ValueError:
+                    data_is_valid = False
+                    print("Invalid Input")
+            elif data_type == float:
+                try:
+                    value = float(text)
+                    data_is_valid = True
+                except ValueError:
+                    data_is_valid = False
+            # Possibilité d'ajouter d'autres validateurs (ex: date) en fonction de vos besoins.
+            if not data_is_valid:
+                print("Invalid input. Please try again.")
+        return value
 
+    @staticmethod    
+    def get_tournament_infos() -> Dict[str, Any]:
+            tournament_infos = {
+                        "name" : Views.input_with_validator("What's the name of the tournament ?  ", str),
+                        "description" : Views.input_with_validator("What's the tournament description ?  ", str),
+                        "location" : Views.input_with_validator("What's the tournament location ?  ", str),
+                        "dateStart" : Views.input_with_validator("When does the tournament start ? format ""XX.XX.XXXX""  ", float),
+                        "dateEnd" : Views.input_with_validator("When does the tournament end ? ", float),
+                        "number_of_rounds" : Views.input_with_validator("How many rounds ? (per default = 4)  ", int)
+            }
+            return tournament_infos
 
-def another_player():
-    print("""
-    Do you want to add another player ? 
+    @staticmethod
+    def get_round_infos() -> Dict[str,str]:
+        """ Récupère et retourne les informations d'un round, sert à l'init."""
+
+        round_info = {
+            "name" : Views.input_with_validator(""" 
+                            What's the name of the round ? :  """, str),
+            "dateStart" : Views.input_with_validator("When does it start ? format ""XX.XX.XXXX"":  ", float),
+            "dateEnd" : Views.input_with_validator("When does it end ? :  ", float)
+                }
+        return round_info
+
+    @staticmethod
+    def tournament_successfully_added() -> None:
+            """Confirmation de l'init et création du tournoi."""
+
+            print(""" 
+                
+                The tournament was sucessfully created ! 
+                
+                Do you want to create the first round ?   
 
                 1. Yes 
-                2. No 
-                3. Main Menu""")
+                2. No (Main Menu)
+                
+                """)
 
 
-def get_user_infos():
-    player_infos = {
-        "name" : input("What's your name ? "),
-        "firstname": input("What's your first name ?  "),
-        "birthdate": input("What's your birthdate ?  ")
-    }
-    return player_infos 
 
 
-def report_menu():
-        print("""
-            Report Menu
-              
-        - 1. List of all players
-        - 2. List of all tournaments
-        - 3. Tournaments data 
-        - 4. Access list of rounds for each tournaments and matches for each rounds.
-        - 5. Main Menu
-              
- """)
+    @staticmethod
+    def display_match(match_number, total_matches, player1, player2):
+        """ Affiche le résultat d'un match"""
 
+        print(f"\n[MATCH {match_number}/{total_matches}]")
+        print(f"1. {player1} won")
+        print(f"2. {player2} won")
+        print(f"3. That's a draw !")
 
-def menu_tournament():
-     print(""" 
-           Menu des tournois 
-           
-           1. Creer un nouveau tournoi
-           2. Retour au menu principal
-           
-           """)
+    @staticmethod
+    def select_players_for_tournament_view(players):
+        """ Sélectionne les joueurs pour le tournoi, via des numéros attribué à chacun"""
 
-
-def validate_data(data,datatype):
-
-    if datatype == str:
-        return data.isdigit() is False
-    elif datatype == int:
-        return data.isdigit() is True
-    elif datatype == date:
-        pass
-
-    raise Exception("Data type not handled yet!")
-
-def input_with_validator(prompt, data_type):
-    # prompt = "What's the name of the tournament ?
-    # 
-
-    data_is_valid = False
-
-    while data_is_valid == False:
-        text = input(prompt)
-        data_is_valid = validate_data(text, data_type)
-    
-    return text
-
-     
-def get_tournament_infos():
-        tournament_infos = {
-                    "name" : input_with_validator("What's the name of the tournament ?  ", str),
-                    "description" : input("What's the tournament description ?  "),
-                    "location" : input("What's the tournament location ?  "),
-                    "dateStart" : input("When does the tournament start ?  "),
-                    "dateEnd" : input("When does the tournament end ? "),
-                    "number_of_rounds" : int(input("How many rounds ? (per default = 4)  "))}
-        return tournament_infos
-
-def get_round_infos():
-     round_info = {
-          "name" : input("What's the name of the round ? :  "),
-          "dateStart" : input("When does it start ? :  "),
-          "dateEnd" : input("When does it end ? :  ")
-            }
-     return round_info
-
-def tournament_successfully_added():
-        print(""" 
-              
-              The tournament was sucessfully created ! 
-              
-              Do you want to create the first round ?   
-
-              1. Yes 
-              2. No (Main Menu)
-              
-              """)
+        print("\n--- Select Player ---")
+        for idx, player in enumerate(players, 1):
+            print(f"{idx} - {player['name']} {player['firstname']} -- ID: {player['id']}.")
         
-def enter_score():
-        print("""
-              
-              Who's won the match ? 
+        choix = input("Enter the numbers's player (ex: 1,3,5) : ")
+        return [int(num.strip()) for num in choix.split(',')]
+                
+    @staticmethod
+    def set_scores_views(match: Any) -> float:
+        """ Gère la saisie du score"""
 
-              1. Joueur1
-              2. Joueur2
-              
-              
-              
-              """)
+        while True:
+            try:
+                score1 = float(input(f"Score for {match.joueur1} (0, 0.5, 1) : "))
+                if score1 not in {0, 0.5, 1}:
+                    raise ValueError
+                return score1
+            except ValueError:
+                print("Error : Enter 0, 0.5 or 1")
 
-def choose_players():
-        player = input(""" 
-                       
-                       Enter the IDs of players who will play in this tournament, split the players by a comma : 
-                       
-                       """)
-        return player
-
-def display_match(match_number, total_matches, player1, player2):
-    print(f"\n[MATCH {match_number}/{total_matches}]")
-    print(f"1. {player1} gagne")
-    print(f"2. {player2} gagne")
-    print(f"3. Match nul")
-
-# Nouvelle fonction pour afficher les joueurs et récupérer les choix
-def select_players_for_tournament_view(players):
-    print("\n--- Sélection des joueurs ---")
-    for idx, player in enumerate(players, 1):
-        print(f"{idx} - {player['name']} {player['firstname']} -- ID: {player['id']}.")
-    
-    choix = input("Entrez les numéros des joueurs (ex: 1,3,5) : ")
-    return [int(num.strip()) for num in choix.split(',')]
-            
-def set_scores_views(match):
-      while True:
-        try:
-            score1 = float(input(f"Score pour {match.joueur1} (0, 0.5, 1) : "))
-            if score1 not in {0, 0.5, 1}:
-                raise ValueError
-            return score1
-        except ValueError:
-            print("Erreur : Entrez uniquement 0, 0.5 ou 1")
-
-def display_debrief(debrief_data):
-    """Affiche le debrief à partir des données brutes."""
-    print("\n=== DEBRIEF FINAL ===")
-    
-    # Classement
-    print("\nClassement Final :")
-    for idx, player in enumerate(debrief_data["ranking"], 1):
-        print(f"{idx}. {player.name} {player.firstname} - {player.score} pts")
-    
-    # Détails des rounds
-    print("\nDétails par Round :")
-    for round in debrief_data["rounds"]:
-        print(f"\n  Round {round.nom} :")
-        for match in round.match_list:
-            result = "Égalité" if match.score1 == 0.5 else \
-                    f"Gagnant: {match.joueur1}" if match.score1 == 1 else \
-                    f"Gagnant: {match.joueur2}"
-            print(f"    {match.joueur1} vs {match.joueur2} → {result}")
+    @staticmethod
+    def display_debrief(debrief_data):
+        """Affiche le debrief à partir des données brutes."""
+        print("\n=== DEBRIEF FINAL ===")
         
-def display_match(match_data): #Partie report, pour avoir les informations d'un tournoi et des rounds
-    print(f"{match_data['joueur1']['name']} {match_data['joueur1']['firstname']} vs {match_data['joueur2']['name']} {match_data['joueur2']['firstname']}")
+        # Classement
+        print("\n Final Ranking :")
+        for idx, player in enumerate(debrief_data["ranking"], 1):
+            print(f"{idx}. {player.name} {player.firstname} - {player.score} pts")
+        
+        # Détails des rounds
+        print("\nRound's details  :")
+        for round in debrief_data["rounds"]:
+            print(f"\n  Round {round.nom} :")
+            for match in round.match_list:
+                result = "Draw" if match.score1 == 0.5 else \
+                        f"Winner: {match.joueur1}" if match.score1 == 1 else \
+                        f"Winner: {match.joueur2}"
+                print(f"    {match.joueur1} vs {match.joueur2} → {result}")
+    
+    @staticmethod
+    def display_match(match_data):
+        """ Partie report, pour avoir les informations d'un tournoi et des rounds """
+
+        print(f"{match_data['joueur1']['name']} {match_data['joueur1']['firstname']} vs {match_data['joueur2']['name']} {match_data['joueur2']['firstname']}")
+
+    @staticmethod
+    def display_round(round_data): 
+        """ Afiche les informations d'un round """
+
+        print(f"\n--- Round {round_data['nom']} ({round_data['dateStart']} à {round_data['dateEnd']}) ---")
+
+    @staticmethod
+    def get_tournament_name(): 
+        """ Demande le nom d'un tournoi pour accéder au report"""
+
+        return input("Tournament's name to display : ")
 
 
-def display_round(round_data): #Partie report toujours.
-    print(f"\n--- Round {round_data['nom']} ({round_data['dateStart']} à {round_data['dateEnd']}) ---")
-
-
-def get_tournament_name(): #Utile pour la partie report
-    return input("Nom du tournoi à afficher : ")
-
-#Partie report 
-
-# liste de tous les joueurs par ordre alphabétique ;
-#  liste de tous les tournois ;
-#  nom et dates d’un tournoi donné ;
-#  liste des joueurs du tournoi par ordre alphabétique ;
-# liste de tous les tours du tournoi et de tous les matchs du tour.

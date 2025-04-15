@@ -4,65 +4,67 @@ import json
 import os
 import views 
 import datetime
-import pdb 
 
+class Json : 
 
-def json_players_data():
-    """ Charge tous les joueurs présent dans le fichier json """
-    player_json = r"C:\Users\maxym\Documents\GitHub\tournament\Playersinfo.json"
-    with open(player_json, "r") as json_file:
-        internal_data = json.load(json_file)
-        return internal_data 
+    @staticmethod
+    def json_players_data():
+        """ Charge tous les joueurs présent dans le fichier json """
+        player_json = r"C:\Users\maxym\Documents\GitHub\tournament\Playersinfo.json"
+        with open(player_json, "r") as json_file:
+            internal_data = json.load(json_file)
+            return internal_data 
 
+    @staticmethod
+    def all_player_json():
+        """ Print le nom et prénom de tous les joueurs présent dans le json"""
+        data = Json.json_players_data()
+        for players in data: 
+            print(players["name"], players["firstname"])
 
-def all_player_json():
-    """ Print le nom et prénom de tous les joueurs présent dans le json"""
-    data = json_players_data()
-    for players in data: 
-        print(players["name"], players["firstname"])
-
-
-def tournaments_data_json():
-    all_tournaments = []
-    
-    # Vérifie si le dossier existe
-    if not os.path.exists("tournaments"):
-        return all_tournaments  # Retourne liste vide si dossier inexistant
-    
-    # Parcourt tous les fichiers .json du dossier
-    for filename in os.listdir("tournaments"):
-        if filename.endswith(".json"):
-            file_path = os.path.join("tournaments", filename)
-            try:
-                with open(file_path, "r") as f:
-                    tournament_data = json.load(f)
-                   
-
-                    all_tournaments.append(tournament_data)
-
-            except (json.JSONDecodeError, PermissionError) as e:
-                print(f"Erreur avec {filename} : {str(e)}")
-    
-    return all_tournaments
-
-
-def all_tournaments_data_json(): 
-    """ Print les noms de tous les tournois """
-    tournament_data = tournaments_data_json()
-    print(tournament_data["name"])
-
-def all_player_json():
-    data = json_players_data()
-    for player in sorted(data, key=lambda x: (x["name"], x["firstname"])):  # Tri ajouté
-        print(player["name"], player["firstname"])
-
-
-def all_tournaments_json():
-    for idx, filename in enumerate(os.listdir("tournaments"), 1):
+    @staticmethod
+    def tournaments_data_json():
+        all_tournaments = []
+        
+        # Vérifie si le dossier existe
+        if not os.path.exists("tournaments"):
+            return all_tournaments  # Retourne liste vide si dossier inexistant
+        
+        # Parcourt tous les fichiers .json du dossier
+        for filename in os.listdir("tournaments"):
             if filename.endswith(".json"):
-                # Extraction du nom avant le ' - ' pour l'affichage
-                tournament_name = filename.split(" - ")[0]
-                print(f"{idx}. {tournament_name}")
+                file_path = os.path.join("tournaments", filename)
+                try:
+                    with open(file_path, "r") as f:
+                        tournament_data = json.load(f)
+                    
+
+                        all_tournaments.append(tournament_data)
+
+                except (json.JSONDecodeError, PermissionError) as e:
+                    print(f"Erreur avec {filename} : {str(e)}")
+        
+        return all_tournaments
+
+    @staticmethod
+    def all_tournaments_data_json(): 
+        """ Print les noms de tous les tournois """
+        tournament_data = Json.tournaments_data_json()
+        print(tournament_data["name"])
+
+    @staticmethod
+    def all_player_json():
+        data = Json.json_players_data()
+        for player in sorted(data, key=lambda x: (x["name"], x["firstname"])):  # Tri ajouté
+            print(player["name"], player["firstname"])
+
+    @staticmethod
+    def all_tournaments_json():
+        for idx, filename in enumerate(os.listdir("tournaments"), 1):
+                if filename.endswith(".json"):
+                    # Extraction du nom avant le ' - ' pour l'affichage
+                    tournament_name = filename.split(" - ")[0]
+                    print(f"{idx}. {tournament_name}")
 
 class Joueur:
     """ Représente un joueur et ses données """
@@ -90,12 +92,7 @@ class Joueur:
             "opponents" : self.opponents
         }
     
-    @classmethod
-    def from_dict(cls, data):
-        player = cls(data["name"])  # 1. Crée une instance de Player avec le nom du JSON
-        player.score = data["score"]  # 2. Attribue le score sauvegardé
-        return player  # 3. Renvoie le joueur reconstruit
-    
+   
     def save_to_json(self):
         player_infos = {
                         "id": self.id,
@@ -112,7 +109,6 @@ class Joueur:
                 with open(file_path, "r") as f:
                     try:
                         players_data = json.load(f)
-                        print(players_data)
                     except json.JSONDecodeError:
                         players_data = []
         else : 
@@ -136,7 +132,6 @@ def generate_ids():
         letters = ''.join(random.choices(string.ascii_uppercase, k=2))
         numbers = ''.join(random.choices("1234567890", k=5))  
         new_id = letters + numbers
-        
         
         return new_id
     
@@ -257,6 +252,8 @@ class Tournament:
             return pairs
         
     def save_current_data_to_json(self):
+        """ Sauvegarde après chaque round la ou en est le programme"""
+
         x = datetime.datetime.now()
         sorted_players = sorted(self.list_of_players, key=lambda p: -p.score)
         current_tournament_infos = {
@@ -267,7 +264,7 @@ class Tournament:
         }
        
     
-        file_path = f"{self.name} - {x.strftime("%c")} - Current Data .json"
+        file_path = f"{self.name} - {x.strftime('%c')} - Current Data .json"
 
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
@@ -286,28 +283,10 @@ class Tournament:
             json.dump(tournament_data_in_real_time,f,indent=2)
             print("Tournoi sauvegardé")
 
-    @classmethod
-    def load_from_json(cls, filename):
-            with open(filename, "r") as f:  # 1. Ouvre le fichier en lecture
-                data = json.load(f)  # 2. Charge le JSON en dictionnaire `data`
-            
-            # 3. Crée une instance de Tournament avec le nom du JSON
-            tournament = cls(data["tournament_name"])
-            
-            # 4. Recrée la liste des joueurs avec leurs scores
-            tournament.list_of_players = [Joueur.from_dict(p) for p in data["current_ranking"]]
-            
-            # 5. Recrée chaque round en passant la liste des joueurs existants
-            tournament.all_rounds = [
-                Tour.from_dict(r, tournament.list_of_players)  # 6. Utilise les joueurs du tournoi
-                for r in data["rounds"]
-            ]
-            
-            return tournament  # 7. Renvoie le tournoi entièrement reconstruit
-    
+   
     def select_players_for_tournament(self):
-        all_players = json_players_data()
-        selected_indices = views.select_players_for_tournament_view(all_players)  
+        all_players = Json.json_players_data()
+        selected_indices = views.Views.select_players_for_tournament_view(all_players)  
         
         self.list_of_players = [
             Joueur(player["id"], player["name"], player["firstname"], player["birthdate"])
@@ -362,18 +341,7 @@ class Tour():
             self.match_list.append(match)
         return self.match_list
     
-    @classmethod
-    def from_dict(cls, data, players):  # 1. Prend les données du round + la liste des joueurs
-        round = cls(data["round_name"])  # 2. Crée un Round avec son nom
-        for match_data in data["matches"]:  # 3. Pour chaque match dans les données
-            # 4. Trouve le joueur 1 dans la liste `players` par son nom
-            player1 = next(p for p in players if p.name == match_data["player1"])
-            # 5. Trouve le joueur 2 de la même manière
-            player2 = next(p for p in players if p.name == match_data["player2"])
-            # 6. Crée un Match avec les joueurs et le score
-            match = Match(player1, player2, tuple(match_data["score"]))
-            round.match_list.append(match)  # 7. Ajoute le match au round
-        return round  # 8. Renvoie le round reconstruit
+    
     
 class Match:
     """ Représente l'instance d'un match, ses joueurs, son score """
@@ -401,10 +369,10 @@ class Match:
     def set_scores(self):
         """Gère la saisie des scores et met à jour l'historique des adversaires"""
         
-        print(f"\n--- Match : {self.joueur1} vs {self.joueur2} ---")
+        print(f"\n--- Match : {self.joueur1} VS {self.joueur2} ---")
         
     
-        score1 = views.set_scores_views(self)
+        score1 = views.Views.set_scores_views(self)
         
 
         self.score1 = score1
@@ -423,5 +391,3 @@ class Match:
             self.joueur2.opponents.append(self.joueur1.id)
 
     ##TODO : finir la gestion des bonnes données (verifications des données, validation)
-    ##TODO : formattage du report des tournois (option 3 et 4 sur le report)
-    ##TODO : mettre en place le controller et le views dans des classes (staticmethod)
