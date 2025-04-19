@@ -67,11 +67,11 @@ class Controllers:
                     if tournament["name"] == tournament_name:  
                 
                         for round in tournament["all_rounds"]:
-                            Views.display_round(round)  
-                    
+                            Views.display_round(round)
+  
                             for match in round["match_list"]:
-                                Views.display_match(match)  
-                                break
+                                Views.display_match(match, show_result = True)  
+                                
             elif user_choice =="5":
                 break
 
@@ -132,7 +132,7 @@ class Controllers:
 
     def run() -> None:
         """ Execute la boucle principale du programme"""
-        os.system("cls")
+        os.system("cls" if os.name == "nt" else "clear")
         while True : 
             Views.display_menu()
             user_choice = Views.get_user_choice()

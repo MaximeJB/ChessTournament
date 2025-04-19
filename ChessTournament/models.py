@@ -10,10 +10,21 @@ class Json :
     @staticmethod
     def json_players_data():
         """ Charge tous les joueurs présent dans le fichier json """
-        player_json = r"C:\Users\maxym\Documents\GitHub\tournament\Playersinfo.json"
-        with open(player_json, "r") as json_file:
-            internal_data = json.load(json_file)
-            return internal_data 
+        file_path = "Playersinfo.json"
+        players_data = []
+
+        if os.path.exists("Playersinfo.json"):
+                with open(file_path, "r") as f:
+                    try:
+                       players_data= json.load(f)
+                    except json.JSONDecodeError:
+                        players_data = []
+        else : 
+            file_path = players_data
+            players_data = []
+            print("La liste des joueurs est vide !")
+
+        return players_data
 
     @staticmethod
     def all_player_json():
@@ -25,26 +36,23 @@ class Json :
     @staticmethod
     def tournaments_data_json():
         all_tournaments = []
+        dir_path = "tournaments"
         
-        # Vérifie si le dossier existe
-        if not os.path.exists("tournaments"):
-            return all_tournaments  # Retourne liste vide si dossier inexistant
+        
+        if os.path.exists(dir_path):
+            
         
         # Parcourt tous les fichiers .json du dossier
-        for filename in os.listdir("tournaments"):
-            if filename.endswith(".json"):
-                file_path = os.path.join("tournaments", filename)
-                try:
-                    with open(file_path, "r") as f:
-                        tournament_data = json.load(f)
-                    
-
-                        all_tournaments.append(tournament_data)
-
-                except (json.JSONDecodeError, PermissionError) as e:
-                    print(f"Erreur avec {filename} : {str(e)}")
+            for filename in os.listdir(dir_path):
+                if "Current Data" not in filename:  # Exclure les fichiers temporaires
+                    file_path = os.path.join(dir_path, filename)
+                    try:
+                        with open(file_path, "r") as f:
+                            all_tournaments.append(json.load(f))
+                    except Exception as e:
+                        print(f"Erreur avec {filename} : {str(e)}")
+            return all_tournaments
         
-        return all_tournaments
 
     @staticmethod
     def all_tournaments_data_json(): 
@@ -54,12 +62,14 @@ class Json :
 
     @staticmethod
     def all_player_json():
+        """ Print le nom et prénom de tous les joueurs"""
         data = Json.json_players_data()
         for player in sorted(data, key=lambda x: (x["name"], x["firstname"])):  # Tri ajouté
             print(player["name"], player["firstname"])
 
     @staticmethod
     def all_tournaments_json():
+        """ Print le titre de tous les tournois enregistré """
         for idx, filename in enumerate(os.listdir("tournaments"), 1):
                 if filename.endswith(".json"):
                     # Extraction du nom avant le ' - ' pour l'affichage
@@ -168,14 +178,15 @@ class Tournament:
         
      
     def take_players_from_json(self):
-        player_json = r"C:\Users\maxym\Documents\GitHub\tournament\Playersinfo.json"
-        with open(player_json, "r") as json_file:
-            internal_data = json.load(json_file)
-        
-            self.list_of_players = [
-                Joueur(j["id"],j["name"], j["firstname"], j["birthdate"])
-                for j in internal_data
-            ]
+        file_path = os.path.join("Playersinfo.json")
+        if os.path.exists(file_path):
+            with open(file_path, "r") as json_file:
+                internal_data = json.load(json_file)
+            
+                self.list_of_players = [
+                    Joueur(j["id"],j["name"], j["firstname"], j["birthdate"])
+                    for j in internal_data
+                ]
         return self.list_of_players
     
     
@@ -257,31 +268,37 @@ class Tournament:
         x = datetime.datetime.now()
         sorted_players = sorted(self.list_of_players, key=lambda p: -p.score)
         current_tournament_infos = {
-            "tournament_name" : self.name,
+            "name" : self.name,
             "date" : f" Tournament started at : {x.strftime("%c")}",
             "rounds" : [round.to_dict() for round in self.all_rounds],
             "current ranking" : [player.to_dict() for player in sorted_players]
         }
        
-    
-        file_path = f"{self.name} - {x.strftime('%c')} - Current Data .json"
+        directory = "tournaments"
+        file_name = f"{self.name} - Current Data.json"
+        file_path = os.path.join(directory,file_name)
 
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
-        if os.path.exists("Tournament_Data_In_real_time.json"):
-            with open(file_path, "r") as f:
-                try : 
-                    tournament_data_in_real_time = json.load(f)
-                    print(tournament_data_in_real_time)
-                except json.JSONDecodeError:
-                    tournament_data_in_real_time = []
-        else : 
-            tournament_data_in_real_time = []
+        data = {
+        "name": self.name,
+        "all_rounds": [round.to_dict() for round in self.all_rounds],
+        "players": [p.to_dict() for p in self.list_of_players]
+        }
 
-        tournament_data_in_real_time = current_tournament_infos
-        with open(file_path,"w") as f:
-            json.dump(tournament_data_in_real_time,f,indent=2)
-            print("Tournoi sauvegardé")
+        try:
+            if os.path.exists(file_path):
+                with open(file_path, "r") as f:
+                    existing_data = json.load(f)
+        except json.JSONDecodeError:
+                existing_data = {}
+                
+        try:
+            with open(file_path, "w") as f:
+                json.dump(data, f, indent=2)
+                print("✅ Données du round sauvegardées !")
+        except Exception as e:
+            print(f" Erreur lors de la sauvegarde : {str(e)}")
 
    
     def select_players_for_tournament(self):

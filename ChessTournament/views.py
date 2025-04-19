@@ -1,7 +1,7 @@
 
 """ Module views avec tous les prints de l'application """
 from typing import Any, Dict
-from datetime import date
+from datetime import datetime
 
 class Views :
     """ Classe statique regroupant toutes les méthodes de vues de l'application"""
@@ -93,38 +93,39 @@ class Views :
 
 
     @staticmethod
-    def input_with_validator(prompt: str, data_type: type) -> Any:
-        """
-        Demande une saisie à l'utilisateur en validant son type.
+    def input_with_validator(prompt: str, data_type: Any) -> Any:
+    
+        while True:
+            text = input(prompt).strip()
 
-        """ 
-        
-        data_is_valid = False
-        value: Any = None
+            #Cas spécial pour les dates
+            if data_type == "birthdate":
+                if len(text) == 10 and text[2] == '.' and text[5] == '.':
+                    try:
+                        day, month, year = map(int, text.split('.'))
+                        datetime(year, month, day)  
+                        return text  
+                    except ValueError:
+                        print("Invalid date (e.g., 30.02.2000 doesn't exist)")
+                else:
+                    print("Expected format: DD.MM.YYYY (e.g., 05.05.2000)")
+                continue
 
-        while not data_is_valid:
-            text = input(prompt)
-            if data_type == str:
-                # On considère valide toute saisie non numérique
-                data_is_valid = not text.isdigit()
-                value = text
-            elif data_type == int:
-                try:
-                    value = int(text)
-                    data_is_valid = True
-                except ValueError:
-                    data_is_valid = False
-                    print("Invalid Input")
-            elif data_type == float:
-                try:
-                    value = float(text)
-                    data_is_valid = True
-                except ValueError:
-                    data_is_valid = False
-            # Possibilité d'ajouter d'autres validateurs (ex: date) en fonction de vos besoins.
-            if not data_is_valid:
-                print("Invalid input. Please try again.")
-        return value
+           
+            try:
+                if data_type == str:
+                    if not text.isdigit():  # Empêche les nombres purs
+                        return text
+                    raise ValueError("Text expected, not number")
+                
+                elif data_type == int:
+                    return int(text)
+                
+                elif data_type == float:
+                    return float(text)
+                    
+            except ValueError as e:
+                print(f"Invalid input: {e}. Please try again.")
 
     @staticmethod    
     def get_tournament_infos() -> Dict[str, Any]:
@@ -132,8 +133,8 @@ class Views :
                         "name" : Views.input_with_validator("What's the name of the tournament ?  ", str),
                         "description" : Views.input_with_validator("What's the tournament description ?  ", str),
                         "location" : Views.input_with_validator("What's the tournament location ?  ", str),
-                        "dateStart" : Views.input_with_validator("When does the tournament start ? format ""XX.XX.XXXX""  ", float),
-                        "dateEnd" : Views.input_with_validator("When does the tournament end ? ", float),
+                        "dateStart" : Views.input_with_validator("When does the tournament start ?  ", str),
+                        "dateEnd" : Views.input_with_validator("When does the tournament end ? ", str),
                         "number_of_rounds" : Views.input_with_validator("How many rounds ? (per default = 4)  ", int)
             }
             return tournament_infos
@@ -145,8 +146,8 @@ class Views :
         round_info = {
             "name" : Views.input_with_validator(""" 
                             What's the name of the round ? :  """, str),
-            "dateStart" : Views.input_with_validator("When does it start ? format ""XX.XX.XXXX"":  ", float),
-            "dateEnd" : Views.input_with_validator("When does it end ? :  ", float)
+            "dateStart" : Views.input_with_validator("When does it start ? :  ", str),
+            "dateEnd" : Views.input_with_validator("When does it end ? :  ", str)
                 }
         return round_info
 
@@ -222,10 +223,23 @@ class Views :
                 print(f"    {match.joueur1} vs {match.joueur2} → {result}")
     
     @staticmethod
-    def display_match(match_data):
+    def display_match(match_data, show_result=False):
         """ Partie report, pour avoir les informations d'un tournoi et des rounds """
 
-        print(f"{match_data['joueur1']['name']} {match_data['joueur1']['firstname']} vs {match_data['joueur2']['name']} {match_data['joueur2']['firstname']}")
+        joueur1 = f"{match_data['joueur1']['name']} {match_data['joueur1']['firstname']}"
+        joueur2 = f"{match_data['joueur2']['name']} {match_data['joueur2']['firstname']}"
+
+        if show_result:
+            score1 = match_data.get('score1', 0)
+            score2 = match_data.get('score2', 0)
+            result = (
+                f"Vainqueur: {joueur1}" if score1 > score2 else
+                f"Vainqueur: {joueur2}" if score2 > score1 else
+                "Match nul"
+            )
+            print(f"{joueur1} vs {joueur2} → {result}")
+        else:
+            print(f"{joueur1} vs {joueur2}")
 
     @staticmethod
     def display_round(round_data): 

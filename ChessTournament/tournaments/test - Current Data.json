@@ -1,0 +1,475 @@
+{
+  "name": "test",
+  "rounds": [
+    {
+      "nom": "t",
+      "dateStart": "t",
+      "dateEnd": "t",
+      "match_list": [
+        {
+          "joueur1": {
+            "id": "RE70685",
+            "name": "illoutch",
+            "firstname": "jb",
+            "birthdate": "010101",
+            "score": 3.0,
+            "opponents": [
+              "EV23976",
+              "DI88350",
+              "FE72922",
+              "FP67536"
+            ]
+          },
+          "joueur2": {
+            "id": "EV23976",
+            "name": "maia ",
+            "firstname": "bertin",
+            "birthdate": "010101",
+            "score": 2.0,
+            "opponents": [
+              "RE70685",
+              "WG78249",
+              "FP67536",
+              "FE72922"
+            ]
+          },
+          "score1": 1.0,
+          "score2": 0.0
+        },
+        {
+          "joueur1": {
+            "id": "FE72922",
+            "name": "nathalie",
+            "firstname": "petit",
+            "birthdate": "010101",
+            "score": 4.0,
+            "opponents": [
+              "DI88350",
+              "FP67536",
+              "RE70685",
+              "EV23976"
+            ]
+          },
+          "joueur2": {
+            "id": "DI88350",
+            "name": "maxime",
+            "firstname": "jb",
+            "birthdate": "010101",
+            "score": 2.0,
+            "opponents": [
+              "FE72922",
+              "RE70685",
+              "WG78249",
+              "FP67536"
+            ]
+          },
+          "score1": 1.0,
+          "score2": 0.0
+        },
+        {
+          "joueur1": {
+            "id": "FP67536",
+            "name": "francois ",
+            "firstname": "bertin",
+            "birthdate": "010101",
+            "score": 1.0,
+            "opponents": [
+              "WG78249",
+              "FE72922",
+              "EV23976",
+              "RE70685",
+              "DI88350"
+            ]
+          },
+          "joueur2": {
+            "id": "WG78249",
+            "name": "romimi",
+            "firstname": "bertin",
+            "birthdate": "010101",
+            "score": 0.0,
+            "opponents": [
+              "FP67536",
+              "EV23976",
+              "DI88350"
+            ]
+          },
+          "score1": 1.0,
+          "score2": 0.0
+        }
+      ]
+    },
+    {
+      "nom": "t",
+      "dateStart": "t",
+      "dateEnd": "t",
+      "match_list": [
+        {
+          "joueur1": {
+            "id": "FE72922",
+            "name": "nathalie",
+            "firstname": "petit",
+            "birthdate": "010101",
+            "score": 4.0,
+            "opponents": [
+              "DI88350",
+              "FP67536",
+              "RE70685",
+              "EV23976"
+            ]
+          },
+          "joueur2": {
+            "id": "FP67536",
+            "name": "francois ",
+            "firstname": "bertin",
+            "birthdate": "010101",
+            "score": 1.0,
+            "opponents": [
+              "WG78249",
+              "FE72922",
+              "EV23976",
+              "RE70685",
+              "DI88350"
+            ]
+          },
+          "score1": 1.0,
+          "score2": 0.0
+        },
+        {
+          "joueur1": {
+            "id": "RE70685",
+            "name": "illoutch",
+            "firstname": "jb",
+            "birthdate": "010101",
+            "score": 3.0,
+            "opponents": [
+              "EV23976",
+              "DI88350",
+              "FE72922",
+              "FP67536"
+            ]
+          },
+          "joueur2": {
+            "id": "DI88350",
+            "name": "maxime",
+            "firstname": "jb",
+            "birthdate": "010101",
+            "score": 2.0,
+            "opponents": [
+              "FE72922",
+              "RE70685",
+              "WG78249",
+              "FP67536"
+            ]
+          },
+          "score1": 1.0,
+          "score2": 0.0
+        },
+        {
+          "joueur1": {
+            "id": "EV23976",
+            "name": "maia ",
+            "firstname": "bertin",
+            "birthdate": "010101",
+            "score": 2.0,
+            "opponents": [
+              "RE70685",
+              "WG78249",
+              "FP67536",
+              "FE72922"
+            ]
+          },
+          "joueur2": {
+            "id": "WG78249",
+            "name": "romimi",
+            "firstname": "bertin",
+            "birthdate": "010101",
+            "score": 0.0,
+            "opponents": [
+              "FP67536",
+              "EV23976",
+              "DI88350"
+            ]
+          },
+          "score1": 1.0,
+          "score2": 0.0
+        }
+      ]
+    },
+    {
+      "nom": "t",
+      "dateStart": "t",
+      "dateEnd": "t",
+      "match_list": [
+        {
+          "joueur1": {
+            "id": "FE72922",
+            "name": "nathalie",
+            "firstname": "petit",
+            "birthdate": "010101",
+            "score": 4.0,
+            "opponents": [
+              "DI88350",
+              "FP67536",
+              "RE70685",
+              "EV23976"
+            ]
+          },
+          "joueur2": {
+            "id": "RE70685",
+            "name": "illoutch",
+            "firstname": "jb",
+            "birthdate": "010101",
+            "score": 3.0,
+            "opponents": [
+              "EV23976",
+              "DI88350",
+              "FE72922",
+              "FP67536"
+            ]
+          },
+          "score1": 1.0,
+          "score2": 0.0
+        },
+        {
+          "joueur1": {
+            "id": "EV23976",
+            "name": "maia ",
+            "firstname": "bertin",
+            "birthdate": "010101",
+            "score": 2.0,
+            "opponents": [
+              "RE70685",
+              "WG78249",
+              "FP67536",
+              "FE72922"
+            ]
+          },
+          "joueur2": {
+            "id": "FP67536",
+            "name": "francois ",
+            "firstname": "bertin",
+            "birthdate": "010101",
+            "score": 1.0,
+            "opponents": [
+              "WG78249",
+              "FE72922",
+              "EV23976",
+              "RE70685",
+              "DI88350"
+            ]
+          },
+          "score1": 1.0,
+          "score2": 0.0
+        },
+        {
+          "joueur1": {
+            "id": "DI88350",
+            "name": "maxime",
+            "firstname": "jb",
+            "birthdate": "010101",
+            "score": 2.0,
+            "opponents": [
+              "FE72922",
+              "RE70685",
+              "WG78249",
+              "FP67536"
+            ]
+          },
+          "joueur2": {
+            "id": "WG78249",
+            "name": "romimi",
+            "firstname": "bertin",
+            "birthdate": "010101",
+            "score": 0.0,
+            "opponents": [
+              "FP67536",
+              "EV23976",
+              "DI88350"
+            ]
+          },
+          "score1": 1.0,
+          "score2": 0.0
+        }
+      ]
+    },
+    {
+      "nom": "t",
+      "dateStart": "t",
+      "dateEnd": "t",
+      "match_list": [
+        {
+          "joueur1": {
+            "id": "FE72922",
+            "name": "nathalie",
+            "firstname": "petit",
+            "birthdate": "010101",
+            "score": 4.0,
+            "opponents": [
+              "DI88350",
+              "FP67536",
+              "RE70685",
+              "EV23976"
+            ]
+          },
+          "joueur2": {
+            "id": "EV23976",
+            "name": "maia ",
+            "firstname": "bertin",
+            "birthdate": "010101",
+            "score": 2.0,
+            "opponents": [
+              "RE70685",
+              "WG78249",
+              "FP67536",
+              "FE72922"
+            ]
+          },
+          "score1": 1.0,
+          "score2": 0.0
+        },
+        {
+          "joueur1": {
+            "id": "RE70685",
+            "name": "illoutch",
+            "firstname": "jb",
+            "birthdate": "010101",
+            "score": 3.0,
+            "opponents": [
+              "EV23976",
+              "DI88350",
+              "FE72922",
+              "FP67536"
+            ]
+          },
+          "joueur2": {
+            "id": "FP67536",
+            "name": "francois ",
+            "firstname": "bertin",
+            "birthdate": "010101",
+            "score": 1.0,
+            "opponents": [
+              "WG78249",
+              "FE72922",
+              "EV23976",
+              "RE70685",
+              "DI88350"
+            ]
+          },
+          "score1": 1.0,
+          "score2": 0.0
+        },
+        {
+          "joueur1": {
+            "id": "DI88350",
+            "name": "maxime",
+            "firstname": "jb",
+            "birthdate": "010101",
+            "score": 2.0,
+            "opponents": [
+              "FE72922",
+              "RE70685",
+              "WG78249",
+              "FP67536"
+            ]
+          },
+          "joueur2": {
+            "id": "FP67536",
+            "name": "francois ",
+            "firstname": "bertin",
+            "birthdate": "010101",
+            "score": 1.0,
+            "opponents": [
+              "WG78249",
+              "FE72922",
+              "EV23976",
+              "RE70685",
+              "DI88350"
+            ]
+          },
+          "score1": 1.0,
+          "score2": 0.0
+        }
+      ]
+    }
+  ],
+  "players": [
+    {
+      "id": "RE70685",
+      "name": "illoutch",
+      "firstname": "jb",
+      "birthdate": "010101",
+      "score": 3.0,
+      "opponents": [
+        "EV23976",
+        "DI88350",
+        "FE72922",
+        "FP67536"
+      ]
+    },
+    {
+      "id": "EV23976",
+      "name": "maia ",
+      "firstname": "bertin",
+      "birthdate": "010101",
+      "score": 2.0,
+      "opponents": [
+        "RE70685",
+        "WG78249",
+        "FP67536",
+        "FE72922"
+      ]
+    },
+    {
+      "id": "FE72922",
+      "name": "nathalie",
+      "firstname": "petit",
+      "birthdate": "010101",
+      "score": 4.0,
+      "opponents": [
+        "DI88350",
+        "FP67536",
+        "RE70685",
+        "EV23976"
+      ]
+    },
+    {
+      "id": "DI88350",
+      "name": "maxime",
+      "firstname": "jb",
+      "birthdate": "010101",
+      "score": 2.0,
+      "opponents": [
+        "FE72922",
+        "RE70685",
+        "WG78249",
+        "FP67536"
+      ]
+    },
+    {
+      "id": "FP67536",
+      "name": "francois ",
+      "firstname": "bertin",
+      "birthdate": "010101",
+      "score": 1.0,
+      "opponents": [
+        "WG78249",
+        "FE72922",
+        "EV23976",
+        "RE70685",
+        "DI88350"
+      ]
+    },
+    {
+      "id": "WG78249",
+      "name": "romimi",
+      "firstname": "bertin",
+      "birthdate": "010101",
+      "score": 0.0,
+      "opponents": [
+        "FP67536",
+        "EV23976",
+        "DI88350"
+      ]
+    }
+  ]
+}
