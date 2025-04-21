@@ -35,22 +35,38 @@ class Json:
             print(players["name"], players["firstname"])
 
     @staticmethod
-    def tournaments_data_json():
-        """Boucle pour trouver les tournois dans tournaments"""
-        all_tournaments = []
+    def tournaments_data_json(tournament_name=None):
+        """Retourne UN SEUL tournoi (dict) si nom spécifié, sinon liste complète"""
         dir_path = "tournaments"
-
+        
+        # Recherche ciblée par nom exact
+        if tournament_name:
+            filename = f"{tournament_name} - Current Data.json"
+            file_path = os.path.join(dir_path, filename)
+            
+            if not os.path.exists(file_path):
+                return None
+            
+            try:
+                with open(file_path, "r") as f:
+                    return json.load(f)  # Retourne directement le dictionnaire
+            except Exception as e:
+                print(f"Erreur lecture {filename} : {str(e)}")
+                return None
+        
+        # Chargement de tous les tournois
+        all_tournaments = []
         if os.path.exists(dir_path):
-
-            # Parcourt tous les fichiers .json du dossier
             for filename in os.listdir(dir_path):
+                if filename.endswith(".json"):
                     file_path = os.path.join(dir_path, filename)
                     try:
                         with open(file_path, "r") as f:
                             all_tournaments.append(json.load(f))
                     except Exception as e:
                         print(f"Erreur avec {filename} : {str(e)}")
-            return all_tournaments
+        
+        return all_tournaments
 
     @staticmethod
     def all_tournaments_data_json():
@@ -172,29 +188,6 @@ class Tournament:
                 ]
         return self.list_of_players
 
-    def save_tournament_data(self):
-        tournaments_infos = {
-            "name": self.name,
-            "description": self.description,
-            "location": self.location,
-            "dateStart": self.dateStart,
-            "dateEnd": self.dateEnd,
-            "Numbers of rounds": self.number_of_rounds,
-            "List of players": [j.to_dict() for j in self.list_of_players],
-            "current_round": (
-                self.current_round.to_dict() if self.current_round else None
-            ),
-            "all_rounds": [round.to_dict() for round in self.all_rounds],
-        }
-
-        os.makedirs("tournaments", exist_ok=True)
-
-        filename = f"{self.name}-{self.dateStart}.json"
-        filename = filename.replace("/", "-").replace(":", "-").replace(" ", "-").replace("\\", "-")
-        file_path = os.path.join("tournaments", filename) 
-
-        with open(file_path, "w") as f:
-            json.dump(tournaments_infos, f, indent=4)
 
     def add_tour(self, tour):
         """Ajoute le tour a la liste de tous les rounds"""
@@ -247,7 +240,7 @@ class Tournament:
         sorted_players = sorted(self.list_of_players, key=lambda p: -p.score)
         current_tournament_infos = {
             "name": self.name,
-            "date": f" Tournament started at :{self.dateStart}",
+            "date": f"Tournament started at :{self.dateStart}",
             "rounds": [round.to_dict() for round in self.all_rounds],
             "current ranking": [player.to_dict() for player in sorted_players],
         }
@@ -260,16 +253,18 @@ class Tournament:
 
         data = {
             "name": self.name,
+            "dateStart":f"Tournament started at : {self.dateStart}",
+            "dateEnd":f"Tournament ended at : {self.dateEnd}",
+            "description" : self.description,
+            "location": self.location,
             "rounds": [round.to_dict() for round in self.all_rounds],
             "players": [p.to_dict() for p in self.list_of_players],
-            "date": f" Tournament started at :{self.dateStart}",
-            "date": f" Tournament ended at :{self.dateEnd}",
         }
 
         try:
             with open(file_path, "w") as f:
                 json.dump(data, f, indent=2)
-                print("✅ Données du round sauvegardées !")
+                print(""" \n ✅ Données du round sauvegardées !""")
         except Exception as e:
             print(f" Erreur lors de la sauvegarde : {str(e)}")
 

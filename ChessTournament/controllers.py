@@ -17,10 +17,12 @@ class Controllers:
             user_choice = Views.get_user_choice()
             if user_choice == "1":
                 while True:
+                    Views.clear_screen()
                     user_infos = Views.get_user_infos()
                     player_id = generate_ids()
                     new_player = Joueur(player_id=player_id, **user_infos)
                     new_player.save_to_json()
+                    Views.clear_screen()
                     Views.another_player()
                     answers = Views.get_user_choice()
                     if answers in {"2", "3"}:
@@ -35,7 +37,6 @@ class Controllers:
         """Gère l'affichage des rapports"""
 
         while True:
-            Views.clear_screen()
             Views.report_menu()
             user_choice = Views.get_user_choice()
             if user_choice == "1":
@@ -51,17 +52,20 @@ class Controllers:
                 break
 
             elif user_choice == "3":
-                tournament_name = input("Tournament's name : ")
-                data = Json.tournaments_data_json()
-                print("hi")
-                for t in data:
-                    if t["name"] == tournament_name:
-                        print(
-                            f"Dates : {t.get('dateStart', 'N/A')} au {t.get('dateEnd', 'N/A')}"
-                        )
-                        print(f"Lieu : {t.get('location', 'N/A')}")
-                        print(f"Description : {t.get('description', 'N/A')}\n")
-                        print("hello")
+                tournament_name = input("Tournament's name : ").strip()
+                tournament_data = Json.tournaments_data_json(tournament_name)
+                
+                if not tournament_data:
+                    print(f"\n Aucun tournoi nommé '{tournament_name}' trouvé.")
+                    return
+                
+                
+                print("\n" + "="*50)
+                print(f"Nom : {tournament_data['name']}")
+                print(f"{tournament_data['dateStart']} until {tournament_data['dateEnd']}")
+                print(f"Location : {tournament_data["location"]}")
+                print(f"Description : {tournament_data["description"]}")
+                print("="*50)
                         
                         
 
@@ -118,6 +122,7 @@ class Controllers:
 
                         for match in versus:
                             print(match)
+                            Views.clear_screen()
                         for match in versus:
                             score1 = Views.set_scores_views(match)
                             match.update_scores(score1)
@@ -130,7 +135,6 @@ class Controllers:
                     debrief_data = tournament.generate_debrief_data()  # Modèle
                     Views.display_debrief(debrief_data)  # Vue
                     tournament.save_current_data_to_json()
-                    tournament.save_tournament_data()
                 elif user_choice == "2":
                     break
             elif user_choice == "2":
@@ -152,6 +156,7 @@ class Controllers:
             elif user_choice == "2":
                 Controllers.start_player_management()
             elif user_choice == "3":
+                Views.clear_screen()
                 Controllers.display_report_controller()
             elif user_choice == "4":
                 Controllers.exit_program()

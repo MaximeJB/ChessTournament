@@ -42,9 +42,10 @@ class Views:
             
             Do you want to :
 
-            1. Add a player
+            -1.Add a player
+            -2.Main Menu  
 
-            2. Main Menu  """
+            """
         )
 
     @staticmethod
@@ -55,9 +56,9 @@ class Views:
             """
         Do you want to add another player ? 
 
-                    1. Yes 
-                    2. No 
-                    3. Main Menu"""
+                    -1.Yes 
+                    -2.No 
+                    -3.Main Menu"""
         )
 
     @staticmethod
@@ -81,11 +82,11 @@ class Views:
             """
                 Report Menu
                 
-            - 1. List of all players
-            - 2. List of all tournaments
-            - 3. Tournaments data 
-            - 4. Access list of rounds for each tournaments and matches for each rounds.
-            - 5. Main Menu
+            -1.List of all players
+            -2.List of all tournaments
+            -3.Tournaments data 
+            -4.Access list of rounds for each tournaments and matches for each rounds.
+            -5.Main Menu
                 
     """
         )
@@ -98,8 +99,8 @@ class Views:
             """ 
             Tournament dashboard 
             
-            1. Create a new tournament
-            2. Back to Main Menu
+            1.Create a new tournament
+            2.Back to Main Menu
             
             """
         )
@@ -239,11 +240,10 @@ class Views:
             """ 
                 
                 The tournament was sucessfully created ! 
-                
                 Do you want to create the first round ?   
 
-                1. Yes 
-                2. No (Main Menu)
+                -1.Yes 
+                -2.No (Main Menu)
                 
                 """
         )
@@ -266,13 +266,16 @@ class Views:
     def set_scores_views(match: Any) -> float:
         """Gère la saisie du score"""
 
+        print("\n" + "="*50)
         print("\n     ENTER THE SCORE : ")
         print(f"\n--- Match : {match.joueur1} VS {match.joueur2} ---\n")
+        print("\n" + "="*50)
         while True:
             try:
                 score1 = float(input(f"Score for {match.joueur1} (0, 0.5, or 1) : "))
                 if score1 not in {0, 0.5, 1}:
                     raise ValueError
+                Views.clear_screen()
                 return score1
             except ValueError:
                 print("Error : Enter 0, 0.5 or 1")
