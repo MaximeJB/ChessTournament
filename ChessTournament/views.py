@@ -38,8 +38,8 @@ class Views:
         """Affiche le menu de gestion des joueurs."""
 
         print(
-            """ 
-            
+            """
+           
             Do you want to :
 
             -1.Add a player
@@ -55,7 +55,7 @@ class Views:
         print(
             """
         Do you want to add another player ? 
-
+        
                     -1.Yes 
                     -2.No 
                     -3.Main Menu"""
@@ -112,7 +112,11 @@ class Views:
             text = input(prompt).strip()
 
             # Cas spécial pour les dates
-            if data_type == str and ("date" in prompt.lower() or "start" in prompt.lower() or "end" in prompt.lower()):
+            if data_type == str and (
+                "date" in prompt.lower()
+                or "start" in prompt.lower()
+                or "end" in prompt.lower()
+            ):
                 if len(text) == 10 and text[2] == "." and text[5] == ".":
                     try:
                         formatted_date = Views.parse_date(text)
@@ -140,7 +144,7 @@ class Views:
                 print(f"Invalid input: {e}. Please try again.")
 
     @staticmethod
-    def parse_date(date_string : str):
+    def parse_date(date_string: str):
         """
         Analyse et formate une chaîne de date dans plusieurs formats possibles.
         Retourne la date au format "DD/MM/YYYY" ou None si le format n'est pas reconnu.
@@ -175,7 +179,7 @@ class Views:
                         else:
                             year += 1900
                         date_obj = datetime(year, int(month), int(day))
-                    
+
                     # Retourne la date formatée
                     return date_obj.strftime("%d/%m/%Y")
                 except ValueError:
@@ -188,33 +192,34 @@ class Views:
             "demain": datetime.now().replace(day=datetime.now().day + 1),
             "hier": datetime.now().replace(day=datetime.now().day - 1),
         }
-        
+
         lower_date = date_string.lower()
         if lower_date in text_dates:
             return text_dates[lower_date].strftime("%d/%m/%Y")
-            
+
         return None
 
     @staticmethod
     def get_tournament_infos() -> Dict[str, Any]:
         tournament_infos = {
             "name": Views.input_with_validator(
-                "What's the name of the tournament ?  ", str),
-            
+                "What's the name of the tournament ?  ", str
+            ),
             "description": Views.input_with_validator(
-                "What's the tournament description ?  ", str),
-
+                "What's the tournament description ?  ", str
+            ),
             "location": Views.input_with_validator(
-                "What's the tournament location ?  ", str),
-
+                "What's the tournament location ?  ", str
+            ),
             "dateStart": Views.input_with_validator(
-                "When does the tournament start ?  ", str),
-
+                "When does the tournament start ?  ", str
+            ),
             "dateEnd": Views.input_with_validator(
-                "When does the tournament end ? ", str),
-
+                "When does the tournament end ? ", str
+            ),
             "number_of_rounds": Views.input_with_validator(
-                "How many rounds ? (per default = 4)  ", int),
+                "How many rounds ? (per default = 4)  ", int
+            ),
         }
         return tournament_infos
 
@@ -223,12 +228,21 @@ class Views:
         """Récupère et retourne les informations d'un round, sert à l'init."""
 
         round_info = {
-            "name": Views.input_with_validator("""\n      
-            What's the name of the round ? :  """,str,),
-            "dateStart": Views.input_with_validator("""
-            When does it start ? :  """, str),
-            "dateEnd": Views.input_with_validator("""
-            When does it end ? :  """, str),
+            "name": Views.input_with_validator(
+                """\n      
+            What's the name of the round ? :  """,
+                str,
+            ),
+            "dateStart": Views.input_with_validator(
+                """
+            When does it start ? :  """,
+                str,
+            ),
+            "dateEnd": Views.input_with_validator(
+                """
+            When does it end ? :  """,
+                str,
+            ),
         }
         return round_info
 
@@ -248,7 +262,6 @@ class Views:
                 """
         )
 
-   
     @staticmethod
     def select_players_for_tournament_view(players):
         """Sélectionne les joueurs pour le tournoi, via des numéros attribué à chacun"""
@@ -266,10 +279,10 @@ class Views:
     def set_scores_views(match: Any) -> float:
         """Gère la saisie du score"""
 
-        print("\n" + "="*50)
+        print("\n" + "=" * 50)
         print("\n     ENTER THE SCORE : ")
         print(f"\n--- Match : {match.joueur1} VS {match.joueur2} ---\n")
-        print("\n" + "="*50)
+        print("\n" + "=" * 50)
         while True:
             try:
                 score1 = float(input(f"Score for {match.joueur1} (0, 0.5, or 1) : "))
@@ -334,10 +347,10 @@ class Views:
         """Afiche les informations d'un round"""
 
         print(
-        f"\n--- Round {round_data.get('nom', 'Inconnu')} "
-        f"({round_data.get('dateStart', '??/??/????')} à "
-        f"{round_data.get('dateEnd', '??/??/????')}) ---"
-    )
+            f"\n--- Round {round_data.get('nom', 'Inconnu')} "
+            f"({round_data.get('dateStart', '??/??/????')} à "
+            f"{round_data.get('dateEnd', '??/??/????')}) ---"
+        )
 
     @staticmethod
     def get_tournament_name():

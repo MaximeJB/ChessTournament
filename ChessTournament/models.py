@@ -3,7 +3,7 @@ import random
 import json
 import os
 import views
-import datetime
+
 
 
 class Json:
@@ -38,22 +38,22 @@ class Json:
     def tournaments_data_json(tournament_name=None):
         """Retourne UN SEUL tournoi (dict) si nom spécifié, sinon liste complète"""
         dir_path = "tournaments"
-        
+
         # Recherche ciblée par nom exact
         if tournament_name:
             filename = f"{tournament_name} - Current Data.json"
             file_path = os.path.join(dir_path, filename)
-            
+
             if not os.path.exists(file_path):
                 return None
-            
+
             try:
                 with open(file_path, "r") as f:
                     return json.load(f)  # Retourne directement le dictionnaire
             except Exception as e:
                 print(f"Erreur lecture {filename} : {str(e)}")
                 return None
-        
+
         # Chargement de tous les tournois
         all_tournaments = []
         if os.path.exists(dir_path):
@@ -65,7 +65,7 @@ class Json:
                             all_tournaments.append(json.load(f))
                     except Exception as e:
                         print(f"Erreur avec {filename} : {str(e)}")
-        
+
         return all_tournaments
 
     @staticmethod
@@ -188,7 +188,6 @@ class Tournament:
                 ]
         return self.list_of_players
 
-
     def add_tour(self, tour):
         """Ajoute le tour a la liste de tous les rounds"""
         self.all_rounds.append(tour)
@@ -236,15 +235,6 @@ class Tournament:
 
     def save_current_data_to_json(self):
         """Sauvegarde après chaque round la ou en est le programme"""
-
-        sorted_players = sorted(self.list_of_players, key=lambda p: -p.score)
-        current_tournament_infos = {
-            "name": self.name,
-            "date": f"Tournament started at :{self.dateStart}",
-            "rounds": [round.to_dict() for round in self.all_rounds],
-            "current ranking": [player.to_dict() for player in sorted_players],
-        }
-
         directory = "tournaments"
         file_name = f"{self.name} - Current Data.json"
         file_path = os.path.join(directory, file_name)
@@ -253,9 +243,9 @@ class Tournament:
 
         data = {
             "name": self.name,
-            "dateStart":f"Tournament started at : {self.dateStart}",
-            "dateEnd":f"Tournament ended at : {self.dateEnd}",
-            "description" : self.description,
+            "dateStart": f"Tournament started at : {self.dateStart}",
+            "dateEnd": f"Tournament ended at : {self.dateEnd}",
+            "description": self.description,
             "location": self.location,
             "rounds": [round.to_dict() for round in self.all_rounds],
             "players": [p.to_dict() for p in self.list_of_players],
@@ -333,14 +323,13 @@ class Tour:
 
 class Match:
     """Représente l'instance d'un match, ses joueurs, son score"""
-    
 
     def __init__(self, joueur1, joueur2):
         self.joueur1 = joueur1
         self.joueur2 = joueur2
         self.score1 = 0
         self.score2 = 0
-        self.players= ([self.joueur1, self.score1], [self.joueur2, self.score2])
+        self.players = ([self.joueur1, self.score1], [self.joueur2, self.score2])
 
     def to_dict(self):
         return {
@@ -355,7 +344,7 @@ class Match:
         
         The match is between {self.joueur1} and {self.joueur2}\n"""
 
-    def update_scores(self,score1):
+    def update_scores(self, score1):
         """Gère la saisie des scores et met à jour l'historique des adversaires"""
 
         self.score1 = score1
@@ -364,8 +353,7 @@ class Match:
         self.joueur2.score += self.score2
 
         # Mise à jour des scores
-        self.players= ([self.joueur1, self.score1]), ([self.joueur2, self.score2])
-        
+        self.players = ([self.joueur1, self.score1]), ([self.joueur2, self.score2])
 
         if self.joueur2.id not in self.joueur1.opponents:
             self.joueur1.opponents.append(self.joueur2.id)

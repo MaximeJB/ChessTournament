@@ -3,7 +3,6 @@ from views import Views
 from models import Joueur, Json, Tournament, Tour, generate_ids
 
 
-
 class Controllers:
     """Classe regroupant les fonctions de contrôle de l'application."""
 
@@ -54,20 +53,19 @@ class Controllers:
             elif user_choice == "3":
                 tournament_name = input("Tournament's name : ").strip()
                 tournament_data = Json.tournaments_data_json(tournament_name)
-                
+
                 if not tournament_data:
                     print(f"\n Aucun tournoi nommé '{tournament_name}' trouvé.")
                     return
-                
-                
-                print("\n" + "="*50)
+
+                print("\n" + "=" * 50)
                 print(f"Nom : {tournament_data['name']}")
-                print(f"{tournament_data['dateStart']} until {tournament_data['dateEnd']}")
+                print(
+                    f"{tournament_data['dateStart']} until {tournament_data['dateEnd']}"
+                )
                 print(f"Location : {tournament_data["location"]}")
                 print(f"Description : {tournament_data["description"]}")
-                print("="*50)
-                        
-                        
+                print("=" * 50)
 
             elif user_choice == "4":
                 tournament_name = Views.get_tournament_name()
@@ -75,13 +73,14 @@ class Controllers:
                 for tournament in data:
                     if tournament.get("name") == tournament_name:
 
-                        for round in tournament.get("rounds", tournament.get("all_rounds", [])):
+                        for round in tournament.get(
+                            "rounds", tournament.get("all_rounds", [])
+                        ):
                             Views.display_round(round)
-                            
-                            
+
                             for match in round.get("match_list", []):
                                 Views.display_match(match, show_result=True)
-                                
+
             elif user_choice == "5":
                 Views.clear_screen
                 break
@@ -130,7 +129,6 @@ class Controllers:
                         tournament.add_tour(round)
                         tournament.save_current_data_to_json()
                         Views.clear_screen
-                        
 
                     debrief_data = tournament.generate_debrief_data()  # Modèle
                     Views.display_debrief(debrief_data)  # Vue
