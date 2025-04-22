@@ -24,7 +24,7 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 
-3. Installez les dépendances
+3. Installez les dépendances (Ici que des bibliothèques pré-installées)
 ```
 pip install -r requirements.txt
 ```
