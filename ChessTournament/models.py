@@ -5,7 +5,6 @@ import os
 import views
 
 
-
 class Json:
 
     @staticmethod
@@ -26,6 +25,7 @@ class Json:
             print("La liste des joueurs est vide !")
 
         return players_data
+
 
     @staticmethod
     def all_player_json():
@@ -68,11 +68,13 @@ class Json:
 
         return all_tournaments
 
+
     @staticmethod
     def all_tournaments_data_json():
         """Print les noms de tous les tournois"""
         tournament_data = Json.tournaments_data_json()
         print(tournament_data["name"])
+
 
     @staticmethod
     def all_tournaments_json():
