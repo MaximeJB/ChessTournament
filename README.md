@@ -28,7 +28,7 @@ source venv/bin/activate
 
 Pour lancer le programme :
 ```
-python main.py
+python run.py
 ```
 
 Suivez les instructions du menu principal pour naviguer dans l'application.
