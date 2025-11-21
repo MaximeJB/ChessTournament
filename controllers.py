@@ -8,8 +8,14 @@ class Controllers:
 
     @staticmethod
     def start_player_management() -> None:
-        """Contrôle de gestion des joueurs"""
+        """Gère le menu de gestion des joueurs.
 
+        Permet d'ajouter de nouveaux joueurs ou de revenir au menu principal.
+        Boucle jusqu'à ce que l'utilisateur choisisse de quitter.
+
+        Returns:
+            None
+        """
         while True:
             Views.clear_screen()
             Views.display_user_management_menu()
@@ -33,8 +39,14 @@ class Controllers:
 
     @staticmethod
     def display_report_controller():
-        """Gère l'affichage des rapports"""
+        """Gère le menu des rapports et l'affichage des données.
 
+        Affiche les joueurs, tournois, détails de tournois ou rounds/matchs.
+        Boucle jusqu'à ce que l'utilisateur choisisse de quitter.
+
+        Returns:
+            None
+        """
         while True:
             Views.report_menu()
             user_choice = Views.get_user_choice()
@@ -46,7 +58,7 @@ class Controllers:
                     break
 
             elif user_choice == "2":
-                Views.clear_screen
+                Views.clear_screen()
                 Json.all_tournaments_json()
                 break
 
@@ -63,16 +75,17 @@ class Controllers:
                 print(
                     f"{tournament_data['dateStart']} until {tournament_data['dateEnd']}"
                 )
-                print(f"Location : {tournament_data["location"]}")
-                print(f"Description : {tournament_data["description"]}")
+                print(f"Location : {tournament_data['location']}")
+                print(f"Description : {tournament_data['description']}")
                 print("=" * 50)
 
             elif user_choice == "4":
                 tournament_name = Views.get_tournament_name()
                 data = Json.tournaments_data_json()
+                tournament_found = False
                 for tournament in data:
                     if tournament.get("name") == tournament_name:
-
+                        tournament_found = True
                         for round in tournament.get(
                             "rounds", tournament.get("all_rounds", [])
                         ):
@@ -80,15 +93,25 @@ class Controllers:
 
                             for match in round.get("match_list", []):
                                 Views.display_match(match, show_result=True)
+                        break
+
+                if not tournament_found:
+                    Views.tournament_not_found_error(tournament_name)
 
             elif user_choice == "5":
-                Views.clear_screen
+                Views.clear_screen()
                 break
 
     @staticmethod
     def create_tournament_controller():
-        """Gère la création et manipulation d'un tournoi"""
+        """Gère la création et l'exécution complète d'un tournoi.
 
+        Permet de créer un tournoi, sélectionner les joueurs, exécuter tous les rounds,
+        enregistrer les scores et afficher le classement final.
+
+        Returns:
+            None
+        """
         while True:
             Views.clear_screen()
             Views.menu_tournament()
@@ -105,15 +128,24 @@ class Controllers:
                 user_choice = Views.get_user_choice()
 
                 if user_choice == "1":
-                    tournament.select_players_for_tournament()
+                    # Player selection logic (moved from models to controller)
+                    all_players = Json.json_players_data()
+                    selected_indices = Views.select_players_for_tournament_view(all_players)
+                    tournament.list_of_players = [
+                        Joueur(
+                            player["id"], player["name"], player["firstname"], player["birthdate"]
+                        )
+                        for player_number, player in enumerate(all_players, 1)
+                        if player_number in selected_indices
+                    ]
                     tournament.save_current_data_to_json()
-                    Views.clear_screen
+                    Views.clear_screen()
 
                     for i in range(tournament.number_of_rounds):
 
                         shuffle_players = tournament.shuffle_and_pairs_players()
                         round_data = Views.get_round_infos()
-                        Views.clear_screen
+                        Views.clear_screen()
                         round = Tour(**round_data)  # instanciation de mon round
                         versus = round.generate_matches_from_pair(
                             shuffle_players
@@ -128,7 +160,7 @@ class Controllers:
 
                         tournament.add_tour(round)
                         tournament.save_current_data_to_json()
-                        Views.clear_screen
+                        Views.clear_screen()
 
                     debrief_data = tournament.generate_debrief_data()  # Modèle
                     Views.display_debrief(debrief_data)  # Vue
@@ -140,11 +172,26 @@ class Controllers:
 
     @staticmethod
     def exit_program() -> None:
-        print(" >>> You closed the program.")
+        """Ferme le programme proprement.
+
+        Affiche un message de fermeture et termine l'exécution.
+
+        Returns:
+            None
+        """
+        Views.exit_message()
         exit()
 
+    @staticmethod
     def run() -> None:
-        """Execute la boucle principale du programme"""
+        """Exécute la boucle principale du programme.
+
+        Affiche le menu principal et redirige vers les différents contrôleurs
+        selon le choix de l'utilisateur.
+
+        Returns:
+            None
+        """
         os.system("cls" if os.name == "nt" else "clear")
         while True:
             Views.display_menu()

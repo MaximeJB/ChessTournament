@@ -24,11 +24,6 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 
-3. Installez les dépendances
-```
-pip install -r requirements.txt
-```
-
 ## Utilisation
 
 Pour lancer le programme :
@@ -55,8 +50,8 @@ flake8 --format=html --htmldir=flake8_rapport --max-line-length=119
 ## Structure du code
 
 Le projet suit le modèle MVC (Modèle-Vue-Contrôleur) :
-- `models/` : Définition des classes du modèle (Joueur, Tournoi, Tour, Match)
-- `views/` : Interfaces utilisateur pour l'affichage et la collecte des données
-- `controllers/` : Logique métier reliant les modèles et les vues
-- `main.py` : Point d'entrée du programme
+- `models` : Définition des classes du modèle (Joueur, Tournoi, Tour, Match)
+- `views` : Interfaces utilisateur pour l'affichage et la collecte des données
+- `controllers` : Logique métier reliant les modèles et les vues
+- `run.py` : Point d'entrée du programme
 

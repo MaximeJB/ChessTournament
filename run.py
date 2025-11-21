@@ -1,5 +1,5 @@
-from controllers import MainController
+from controllers import Controllers
 
 if __name__ == "__main__":
-    main_controller = MainController()
-    main_controller.run()
+    Controllers.run()
+    

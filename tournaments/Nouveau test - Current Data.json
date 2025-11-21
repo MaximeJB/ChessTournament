@@ -1,0 +1,311 @@
+{
+  "name": "Nouveau test",
+  "dateStart": "Tournament started at : 11/06/1996",
+  "dateEnd": "Tournament ended at : 11/07/1996",
+  "description": "Juste un test",
+  "location": "Paris",
+  "rounds": [
+    {
+      "name": "premier round",
+      "dateStart": "11/06/1996",
+      "dateEnd": "11/07/1996",
+      "match_list": [
+        {
+          "joueur1": {
+            "id": "FE72922",
+            "name": "nathalie",
+            "firstname": "petit",
+            "birthdate": "010101",
+            "score": 2.0,
+            "opponents": [
+              "FP67536",
+              "EV23976",
+              "DI88350"
+            ]
+          },
+          "joueur2": {
+            "id": "FP67536",
+            "name": "francois ",
+            "firstname": "bertin",
+            "birthdate": "010101",
+            "score": 0.0,
+            "opponents": [
+              "FE72922",
+              "DI88350",
+              "EV23976"
+            ]
+          },
+          "score1": 1.0,
+          "score2": 0.0
+        },
+        {
+          "joueur1": {
+            "id": "EV23976",
+            "name": "maia ",
+            "firstname": "bertin",
+            "birthdate": "010101",
+            "score": 4.0,
+            "opponents": [
+              "DI88350",
+              "FE72922",
+              "FP67536"
+            ]
+          },
+          "joueur2": {
+            "id": "DI88350",
+            "name": "maxime",
+            "firstname": "jb",
+            "birthdate": "010101",
+            "score": 2.0,
+            "opponents": [
+              "EV23976",
+              "FP67536",
+              "FE72922"
+            ]
+          },
+          "score1": 1.0,
+          "score2": 0.0
+        }
+      ]
+    },
+    {
+      "name": "d",
+      "dateStart": "11/06/1996",
+      "dateEnd": "11/06/1996",
+      "match_list": [
+        {
+          "joueur1": {
+            "id": "EV23976",
+            "name": "maia ",
+            "firstname": "bertin",
+            "birthdate": "010101",
+            "score": 4.0,
+            "opponents": [
+              "DI88350",
+              "FE72922",
+              "FP67536"
+            ]
+          },
+          "joueur2": {
+            "id": "FE72922",
+            "name": "nathalie",
+            "firstname": "petit",
+            "birthdate": "010101",
+            "score": 2.0,
+            "opponents": [
+              "FP67536",
+              "EV23976",
+              "DI88350"
+            ]
+          },
+          "score1": 1.0,
+          "score2": 0.0
+        },
+        {
+          "joueur1": {
+            "id": "DI88350",
+            "name": "maxime",
+            "firstname": "jb",
+            "birthdate": "010101",
+            "score": 2.0,
+            "opponents": [
+              "EV23976",
+              "FP67536",
+              "FE72922"
+            ]
+          },
+          "joueur2": {
+            "id": "FP67536",
+            "name": "francois ",
+            "firstname": "bertin",
+            "birthdate": "010101",
+            "score": 0.0,
+            "opponents": [
+              "FE72922",
+              "DI88350",
+              "EV23976"
+            ]
+          },
+          "score1": 1.0,
+          "score2": 0.0
+        }
+      ]
+    },
+    {
+      "name": "d",
+      "dateStart": "11/06/1996",
+      "dateEnd": "11/06/1996",
+      "match_list": [
+        {
+          "joueur1": {
+            "id": "EV23976",
+            "name": "maia ",
+            "firstname": "bertin",
+            "birthdate": "010101",
+            "score": 4.0,
+            "opponents": [
+              "DI88350",
+              "FE72922",
+              "FP67536"
+            ]
+          },
+          "joueur2": {
+            "id": "FP67536",
+            "name": "francois ",
+            "firstname": "bertin",
+            "birthdate": "010101",
+            "score": 0.0,
+            "opponents": [
+              "FE72922",
+              "DI88350",
+              "EV23976"
+            ]
+          },
+          "score1": 1.0,
+          "score2": 0.0
+        },
+        {
+          "joueur1": {
+            "id": "DI88350",
+            "name": "maxime",
+            "firstname": "jb",
+            "birthdate": "010101",
+            "score": 2.0,
+            "opponents": [
+              "EV23976",
+              "FP67536",
+              "FE72922"
+            ]
+          },
+          "joueur2": {
+            "id": "FE72922",
+            "name": "nathalie",
+            "firstname": "petit",
+            "birthdate": "010101",
+            "score": 2.0,
+            "opponents": [
+              "FP67536",
+              "EV23976",
+              "DI88350"
+            ]
+          },
+          "score1": 1.0,
+          "score2": 0.0
+        }
+      ]
+    },
+    {
+      "name": "f",
+      "dateStart": "11/06/1996",
+      "dateEnd": "11/06/1996",
+      "match_list": [
+        {
+          "joueur1": {
+            "id": "EV23976",
+            "name": "maia ",
+            "firstname": "bertin",
+            "birthdate": "010101",
+            "score": 4.0,
+            "opponents": [
+              "DI88350",
+              "FE72922",
+              "FP67536"
+            ]
+          },
+          "joueur2": {
+            "id": "DI88350",
+            "name": "maxime",
+            "firstname": "jb",
+            "birthdate": "010101",
+            "score": 2.0,
+            "opponents": [
+              "EV23976",
+              "FP67536",
+              "FE72922"
+            ]
+          },
+          "score1": 1.0,
+          "score2": 0.0
+        },
+        {
+          "joueur1": {
+            "id": "FE72922",
+            "name": "nathalie",
+            "firstname": "petit",
+            "birthdate": "010101",
+            "score": 2.0,
+            "opponents": [
+              "FP67536",
+              "EV23976",
+              "DI88350"
+            ]
+          },
+          "joueur2": {
+            "id": "FP67536",
+            "name": "francois ",
+            "firstname": "bertin",
+            "birthdate": "010101",
+            "score": 0.0,
+            "opponents": [
+              "FE72922",
+              "DI88350",
+              "EV23976"
+            ]
+          },
+          "score1": 1.0,
+          "score2": 0.0
+        }
+      ]
+    }
+  ],
+  "players": [
+    {
+      "id": "FE72922",
+      "name": "nathalie",
+      "firstname": "petit",
+      "birthdate": "010101",
+      "score": 2.0,
+      "opponents": [
+        "FP67536",
+        "EV23976",
+        "DI88350"
+      ]
+    },
+    {
+      "id": "FP67536",
+      "name": "francois ",
+      "firstname": "bertin",
+      "birthdate": "010101",
+      "score": 0.0,
+      "opponents": [
+        "FE72922",
+        "DI88350",
+        "EV23976"
+      ]
+    },
+    {
+      "id": "EV23976",
+      "name": "maia ",
+      "firstname": "bertin",
+      "birthdate": "010101",
+      "score": 4.0,
+      "opponents": [
+        "DI88350",
+        "FE72922",
+        "FP67536"
+      ]
+    },
+    {
+      "id": "DI88350",
+      "name": "maxime",
+      "firstname": "jb",
+      "birthdate": "010101",
+      "score": 2.0,
+      "opponents": [
+        "EV23976",
+        "FP67536",
+        "FE72922"
+      ]
+    }
+  ]
+}
